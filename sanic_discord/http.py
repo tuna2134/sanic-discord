@@ -7,8 +7,7 @@ class ApiError(Exception):
     pass
 
 class HttpClient:
-    def __init__(self, token):
-        self.token = token
+    def __init__(self):
         self.session = aiohttp.ClientSession()
         
     async def request(self, method, path, *args, **kwargs):
