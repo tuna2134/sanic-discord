@@ -6,12 +6,6 @@ with open("README.md", "r") as fh:
 def _requires_from_file(filename):
     return open(filename, encoding="utf8").read().splitlines()
 
-extras_require = {
-    "async": [
-        "aiohttp>=3.8.1"
-    ]
-}
-
 setuptools.setup(
     name="sanic-discord",
     version="1.0.0",
@@ -22,7 +16,6 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/tuna2134/google-custom-search",
     install_requires=_requires_from_file('rqs.txt'),
-    extras_require=extras_require,
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3.8",
