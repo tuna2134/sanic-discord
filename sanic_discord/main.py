@@ -12,12 +12,6 @@ class HttpClient:
         self.session = aiohttp.ClientSession()
         
     async def request(self, method, path, *args, **kwargs):
-        headers = {
-            "Authorization": f"Bot {self.token}"
-        }
-        if kwargs.get("json"):
-            headers["Content-Type"] = "application/json"
-        kwargs["headers"] = headers
         for t in range(5):
             async with self.session.request(method, path, *args, **kwargs) as r:
                 if r.status == 429:
@@ -28,5 +22,3 @@ class HttpClient:
                         await sleep(data["retry_after"])
                 else:
                     return await r.json()
-                
-    async def 
