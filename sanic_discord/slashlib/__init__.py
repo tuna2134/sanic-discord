@@ -1,2 +1,2 @@
 from .bot import *
-from .cog import *
+from .cogs import *
