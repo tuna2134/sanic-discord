@@ -1,7 +1,6 @@
 import aiohttp
 from functools import wraps
 from sanic.response import redirect
-from .model import user
 
 class ApiError(Exception):
     pass
