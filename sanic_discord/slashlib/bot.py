@@ -45,6 +45,10 @@ class Bot:
                     elif r.status == 500:
                         raise ApiError("500 error")
 
+    async def if_finish(self, conn_info):
+        if conn_info.ctx.path == "/interaction":
+            conn_info.ctx._wait_response.set()
+
     async def fetch_user(self, id):
         return User(await self.request("GET", f"/users/{id}"))
 
