@@ -29,7 +29,7 @@ class Client:
         res.cookies["token"] = data["access_token"]
         return res
 
-    def require():
+    def oauth2_require(self):
         def decorator(f):
             @wraps(f)
             async def function(request, *args, **kwargs):
