@@ -8,6 +8,7 @@ from aiohttp import ClientSession
 from importlib import import_module
 from os import getenv
 import asyncio
+from sanic import Sanic
 
 from typing import Optional
 
@@ -16,12 +17,21 @@ class ApiError(Exception):
 
 class Bot:
     ApiUrl = "https://discord.com/api/v9"
-    def __init__(self, app, token, publickey):
+    def __init__(self, app: Sanic, token: str,
+                 publickey: str, interaction_path: str="/interaction"):
         self.web = app
         self.token = token
         self.publickey = publickey
         self.commands = []
         self.cogs = {}
+        app.add_route(self.interaction_recieve, interaction_path)
+        app.add_signal(self.check_responsed, "http.lifecycle.complete")
+        
+    async def check_responsed(self, conn_info):
+        await self.if_finish(conn_info)
+        
+    async def interaction_recieve(self, request):
+        return await self.interaction(request)
 
     async def request(self, method: str,
                       path: str
