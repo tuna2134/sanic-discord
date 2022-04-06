@@ -89,7 +89,7 @@ class Bot:
         await interaction.request.conn_info.ctx._wait_response.wait()
         command.dispatch(interaction)
 
-    def slash_command(self, name: str, description: str):
+    def slash_command(self, name: str, description: str, options: List[CommandOption]=None):
         def decorator(coro):
             cmd = Command(coro, name, description)
             self.commands.append(cmd)
