@@ -8,7 +8,7 @@ def _requires_from_file(filename):
 
 setuptools.setup(
     name="sanic-discord",
-    version="1.0.0a2",
+    version="2022.4.14",
     author="DMS",
     author_email="masato190411@gmail.com",
     description="discord oauth2",
