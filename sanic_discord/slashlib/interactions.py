@@ -5,6 +5,10 @@ class Interaction:
     def __init__(self, client, data):
         self.__data = data
         self.client = client
+        
+    @property
+    def response(self):
+        return InteractionResponse(self)
 
     @property
     def token(self):
@@ -45,6 +49,27 @@ class Interaction:
 
     async def fetch_message(self):
         return InteractionMessage(self, await self.client.request("GET", f"/webhooks/829578365634740225/{self.token}/messages/@original"))
+    
+class InteractionResponse:
+    def __init__(self, interaction):
+        self.request = interaction.request
+        
+    async def send(self, content=None, *,
+             tts=None, embeds: list=None,
+             ephemeral: bool=False):
+        payload = {
+            "type": 4,
+            "data": {}
+        }
+        if content is not None:
+            payload["data"]["content"] = content
+        if tts is not None:
+            payload["data"]["tts"] = True
+        if embeds is not None:
+            payload["data"]["embeds"] = [embed.payload for embed in embeds]
+        if ephemeral is True:
+            payload["flags"] = 1 << 6
+        await self.request.respond(json(payload)) 
 
 class InteractionMessage:
     def __init__(self, interaction, data):
