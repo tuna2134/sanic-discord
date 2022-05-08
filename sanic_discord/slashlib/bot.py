@@ -19,9 +19,9 @@ class Bot:
     ApiUrl = "https://discord.com/api/v9"
     def __init__(self, app: Sanic, token: str,
                  publickey: str, interaction_path: str="/interaction"):
+        self.verifykey = VerifyKey(bytes.fromhex(publickey))
         self.web = app
         self.token = token
-        self.publickey = publickey
         self.commands = []
         self.cogs = {}
         app.add_route(self.interaction_recieve, interaction_path)
@@ -162,11 +162,10 @@ class Bot:
             await self.request("PATCH", f"/applications/829578365634740225/commands/{cmd_id}", json=data)
 
     async def interaction(self, request):
-        verify_key = VerifyKey(bytes.fromhex(self.publickey))
         signature = request.headers.get("x-signature-ed25519")
         timestamp = request.headers.get("x-signature-timestamp")
         try:
-            verify_key.verify(f'{timestamp}{request.body.decode()}'.encode(), bytes.fromhex(signature))
+            self.verify_key.verify(f'{timestamp}{request.body.decode()}'.encode(), bytes.fromhex(signature))
         except BadSignatureError:
             return text("invalid request signature", status=401)
         else:
