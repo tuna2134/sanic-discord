@@ -16,7 +16,7 @@ class ApiError(Exception):
     pass
 
 class Bot:
-    ApiUrl = "https://discord.com/api/v9"
+    ApiUrl = "https://discord.com/api/v10"
     def __init__(self, app: Sanic, token: str,
                  publickey: str, interaction_path: str="/interaction"):
         self.verifykey = VerifyKey(bytes.fromhex(publickey))
