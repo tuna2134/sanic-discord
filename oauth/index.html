@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
 <title>sanic_discord.oauth API documentation</title>
-<meta name="description" content="" />
+<meta name="description" content="sanic-discord.oauth …" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -22,11 +22,53 @@
 <h1 class="title">Module <code>sanic_discord.oauth</code></h1>
 </header>
 <section id="section-intro">
+<h1 id="sanic-discordoauth">sanic-discord.oauth</h1>
+<h2 id="about">About</h2>
+<p>This is for discord oauth2.</p>
+<h2 id="example">Example</h2>
+<pre><code class="language-python">from sanic import Sanic, response
+from sanic_discord import Oauth2
+
+from os import getenv
+
+
+app = Sanic(&quot;hello&quot;)
+oauth2 = Oauth2(
+    app, client_id=getenv(&quot;CLIENT_ID&quot;), client_secret=getenv(&quot;CLIENT_SECRET&quot;),
+    redirect_uri=&quot;http://127.0.0.1:8000/callback&quot;
+)
+
+
+@app.get(&quot;/callback&quot;)
+@oauth2.exchange_code()
+async def redirect(request, access_token):
+    r = response.json({&quot;access_token&quot;: access_token.access_token})
+    r.cookies[&quot;access_token&quot;] = access_token.access_token
+    r.cookies[&quot;access_token&quot;][&quot;expires&quot;] = access_token.expires_in
+    return r
+
+@app.get(&quot;/login&quot;)
+async def login(request):
+    return response.redirect(oauth2.get_authorize_url([&quot;identify&quot;, &quot;email&quot;]))
+
+@app.get(&quot;/&quot;)
+async def index(request):
+    if &quot;access_token&quot; in request.cookies:
+        return response.json(
+            await oauth2.fetch_user(request.cookies[&quot;access_token&quot;])
+        )
+    return response.redirect(&quot;/login&quot;)
+
+app.run(&quot;0.0.0.0&quot;)
+</code></pre>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from .oauth import Oauth2
+<pre><code class="python">&#34;&#34;&#34;
+.. include:: ./README.md
+&#34;&#34;&#34;
+from .oauth import Oauth2
 from .errors import OauthException
 from .access_token import AccessToken, AccessTokenType</code></pre>
 </details>
@@ -58,7 +100,13 @@ from .access_token import AccessToken, AccessTokenType</code></pre>
 <nav id="sidebar">
 <h1>Index</h1>
 <div class="toc">
-<ul></ul>
+<ul>
+<li><a href="#sanic-discordoauth">sanic-discord.oauth</a><ul>
+<li><a href="#about">About</a></li>
+<li><a href="#example">Example</a></li>
+</ul>
+</li>
+</ul>
 </div>
 <ul id="index">
 <li><h3>Super-module</h3>
