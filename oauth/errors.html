@@ -30,7 +30,13 @@
 
 
 class OauthException(SanicException):
-    status_code = 403</code></pre>
+    status_code = 403
+
+class HttpException(SanicException):
+    status_code = 500
+
+class NotFoundException(SanicException):
+    status_code = 404</code></pre>
 </details>
 </section>
 <section>
@@ -42,6 +48,60 @@ class OauthException(SanicException):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="sanic_discord.oauth.errors.HttpException"><code class="flex name class">
+<span>class <span class="ident">HttpException</span></span>
+<span>(</span><span>message: Union[str, bytes, ForwardRef(None)] = None, status_code: Optional[int] = None, quiet: Optional[bool] = None, context: Optional[Dict[str, Any]] = None, extra: Optional[Dict[str, Any]] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class HttpException(SanicException):
+    status_code = 500</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>sanic.exceptions.SanicException</li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="sanic_discord.oauth.errors.HttpException.status_code"><code class="name">var <span class="ident">status_code</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="sanic_discord.oauth.errors.NotFoundException"><code class="flex name class">
+<span>class <span class="ident">NotFoundException</span></span>
+<span>(</span><span>message: Union[str, bytes, ForwardRef(None)] = None, status_code: Optional[int] = None, quiet: Optional[bool] = None, context: Optional[Dict[str, Any]] = None, extra: Optional[Dict[str, Any]] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class NotFoundException(SanicException):
+    status_code = 404</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>sanic.exceptions.SanicException</li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="sanic_discord.oauth.errors.NotFoundException.status_code"><code class="name">var <span class="ident">status_code</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
 <dt id="sanic_discord.oauth.errors.OauthException"><code class="flex name class">
 <span>class <span class="ident">OauthException</span></span>
 <span>(</span><span>message: Union[str, bytes, ForwardRef(None)] = None, status_code: Optional[int] = None, quiet: Optional[bool] = None, context: Optional[Dict[str, Any]] = None, extra: Optional[Dict[str, Any]] = None)</span>
@@ -85,6 +145,18 @@ class OauthException(SanicException):
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
+<li>
+<h4><code><a title="sanic_discord.oauth.errors.HttpException" href="#sanic_discord.oauth.errors.HttpException">HttpException</a></code></h4>
+<ul class="">
+<li><code><a title="sanic_discord.oauth.errors.HttpException.status_code" href="#sanic_discord.oauth.errors.HttpException.status_code">status_code</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sanic_discord.oauth.errors.NotFoundException" href="#sanic_discord.oauth.errors.NotFoundException">NotFoundException</a></code></h4>
+<ul class="">
+<li><code><a title="sanic_discord.oauth.errors.NotFoundException.status_code" href="#sanic_discord.oauth.errors.NotFoundException.status_code">status_code</a></code></li>
+</ul>
+</li>
 <li>
 <h4><code><a title="sanic_discord.oauth.errors.OauthException" href="#sanic_discord.oauth.errors.OauthException">OauthException</a></code></h4>
 <ul class="">

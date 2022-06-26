@@ -26,7 +26,9 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from typing import TypedDict
+<pre><code class="python">from .http import HttpClient
+
+from typing import TypedDict
 
 from datetime import datetime, timedelta
 
@@ -39,16 +41,35 @@ class AccessTokenType(TypedDict):
     scope: str
 
 class AccessToken:
-    def __init__(self, data: AccessTokenType):
+    &#34;&#34;&#34;
+    Accesstoken object.
+    
+    Args:
+        data (AccessTokenType): The access token data.
+        http (HttpClient): The HTTP client to use.
+    
+    Attributes:
+        access_token (str): The access token.
+        token_type (str): The token type.
+        refresh_token (str): The refresh token.
+        scope (str): The scope.
+        expires_in (datetime): The expiration date.&#34;&#34;&#34;
+    def __init__(self, data: AccessTokenType, http: HttpClient):
+        self.http = http
         self.data = data
         self.access_token = data[&#34;access_token&#34;]
         self.token_type = data[&#34;token_type&#34;]
         self.refresh_token = data[&#34;refresh_token&#34;]
         self.scope = data[&#34;scope&#34;]
+        self.expires_in = datetime.now() + timedelta(seconds=self.data[&#34;expires_in&#34;])
 
-    @property
-    def expires_in(self) -&gt; datetime:
-        return datetime.now() + timedelta(seconds=self.data[&#34;expires_in&#34;])</code></pre>
+    async def fetch_user(self) -&gt; dict:
+        &#34;&#34;&#34;
+        Fetches the user&#39;s profile using an access token.
+        
+        Returns:
+            dict: The user&#39;s profile.&#34;&#34;&#34;
+        return await self.http.fetch_user(self.access_token)</code></pre>
 </details>
 </section>
 <section>
@@ -62,38 +83,88 @@ class AccessToken:
 <dl>
 <dt id="sanic_discord.oauth.access_token.AccessToken"><code class="flex name class">
 <span>class <span class="ident">AccessToken</span></span>
-<span>(</span><span>data: <a title="sanic_discord.oauth.access_token.AccessTokenType" href="#sanic_discord.oauth.access_token.AccessTokenType">AccessTokenType</a>)</span>
+<span>(</span><span>data: <a title="sanic_discord.oauth.access_token.AccessTokenType" href="#sanic_discord.oauth.access_token.AccessTokenType">AccessTokenType</a>, http: <a title="sanic_discord.oauth.http.HttpClient" href="http.html#sanic_discord.oauth.http.HttpClient">HttpClient</a>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Accesstoken object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>data</code></strong> :&ensp;<code><a title="sanic_discord.oauth.access_token.AccessTokenType" href="#sanic_discord.oauth.access_token.AccessTokenType">AccessTokenType</a></code></dt>
+<dd>The access token data.</dd>
+<dt><strong><code>http</code></strong> :&ensp;<code>HttpClient</code></dt>
+<dd>The HTTP client to use.</dd>
+</dl>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>access_token</code></strong> :&ensp;<code>str</code></dt>
+<dd>The access token.</dd>
+<dt><strong><code>token_type</code></strong> :&ensp;<code>str</code></dt>
+<dd>The token type.</dd>
+<dt><strong><code>refresh_token</code></strong> :&ensp;<code>str</code></dt>
+<dd>The refresh token.</dd>
+<dt><strong><code>scope</code></strong> :&ensp;<code>str</code></dt>
+<dd>The scope.</dd>
+<dt><strong><code>expires_in</code></strong> :&ensp;<code>datetime</code></dt>
+<dd>The expiration date.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class AccessToken:
-    def __init__(self, data: AccessTokenType):
+    &#34;&#34;&#34;
+    Accesstoken object.
+    
+    Args:
+        data (AccessTokenType): The access token data.
+        http (HttpClient): The HTTP client to use.
+    
+    Attributes:
+        access_token (str): The access token.
+        token_type (str): The token type.
+        refresh_token (str): The refresh token.
+        scope (str): The scope.
+        expires_in (datetime): The expiration date.&#34;&#34;&#34;
+    def __init__(self, data: AccessTokenType, http: HttpClient):
+        self.http = http
         self.data = data
         self.access_token = data[&#34;access_token&#34;]
         self.token_type = data[&#34;token_type&#34;]
         self.refresh_token = data[&#34;refresh_token&#34;]
         self.scope = data[&#34;scope&#34;]
+        self.expires_in = datetime.now() + timedelta(seconds=self.data[&#34;expires_in&#34;])
 
-    @property
-    def expires_in(self) -&gt; datetime:
-        return datetime.now() + timedelta(seconds=self.data[&#34;expires_in&#34;])</code></pre>
+    async def fetch_user(self) -&gt; dict:
+        &#34;&#34;&#34;
+        Fetches the user&#39;s profile using an access token.
+        
+        Returns:
+            dict: The user&#39;s profile.&#34;&#34;&#34;
+        return await self.http.fetch_user(self.access_token)</code></pre>
 </details>
-<h3>Instance variables</h3>
+<h3>Methods</h3>
 <dl>
-<dt id="sanic_discord.oauth.access_token.AccessToken.expires_in"><code class="name">var <span class="ident">expires_in</span> : datetime.datetime</code></dt>
+<dt id="sanic_discord.oauth.access_token.AccessToken.fetch_user"><code class="name flex">
+<span>async def <span class="ident">fetch_user</span></span>(<span>self) ‑> dict</span>
+</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Fetches the user's profile using an access token.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict</code></dt>
+<dd>The user's profile.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@property
-def expires_in(self) -&gt; datetime:
-    return datetime.now() + timedelta(seconds=self.data[&#34;expires_in&#34;])</code></pre>
+<pre><code class="python">async def fetch_user(self) -&gt; dict:
+    &#34;&#34;&#34;
+    Fetches the user&#39;s profile using an access token.
+    
+    Returns:
+        dict: The user&#39;s profile.&#34;&#34;&#34;
+    return await self.http.fetch_user(self.access_token)</code></pre>
 </details>
 </dd>
 </dl>
@@ -172,7 +243,7 @@ dict(one=1, two=2)</p></div>
 <li>
 <h4><code><a title="sanic_discord.oauth.access_token.AccessToken" href="#sanic_discord.oauth.access_token.AccessToken">AccessToken</a></code></h4>
 <ul class="">
-<li><code><a title="sanic_discord.oauth.access_token.AccessToken.expires_in" href="#sanic_discord.oauth.access_token.AccessToken.expires_in">expires_in</a></code></li>
+<li><code><a title="sanic_discord.oauth.access_token.AccessToken.fetch_user" href="#sanic_discord.oauth.access_token.AccessToken.fetch_user">fetch_user</a></code></li>
 </ul>
 </li>
 <li>
