@@ -160,9 +160,8 @@ class Oauth2:
         Returns:
             str: The URL to authorize the application.
         &#34;&#34;&#34;
-        scope = &#34; &#34;.join(scope)
         return f&#34;{self.url}/oauth2/authorize&#34; \
-            f&#34;?client_id={self.client_id}&amp;scope={scope}&#34; \
+            f&#34;?client_id={self.client_id}&amp;scope={&#39; &#39;.join(scope)}&#34; \
             f&#34;&amp;response_type=code&amp;redirect_uri={self.redirect_uri}&#34;</code></pre>
 </details>
 </section>
@@ -332,9 +331,8 @@ class Oauth2:
         Returns:
             str: The URL to authorize the application.
         &#34;&#34;&#34;
-        scope = &#34; &#34;.join(scope)
         return f&#34;{self.url}/oauth2/authorize&#34; \
-            f&#34;?client_id={self.client_id}&amp;scope={scope}&#34; \
+            f&#34;?client_id={self.client_id}&amp;scope={&#39; &#39;.join(scope)}&#34; \
             f&#34;&amp;response_type=code&amp;redirect_uri={self.redirect_uri}&#34;</code></pre>
 </details>
 <h3>Class variables</h3>
@@ -461,9 +459,8 @@ class Oauth2:
     Returns:
         str: The URL to authorize the application.
     &#34;&#34;&#34;
-    scope = &#34; &#34;.join(scope)
     return f&#34;{self.url}/oauth2/authorize&#34; \
-        f&#34;?client_id={self.client_id}&amp;scope={scope}&#34; \
+        f&#34;?client_id={self.client_id}&amp;scope={&#39; &#39;.join(scope)}&#34; \
         f&#34;&amp;response_type=code&amp;redirect_uri={self.redirect_uri}&#34;</code></pre>
 </details>
 </dd>
