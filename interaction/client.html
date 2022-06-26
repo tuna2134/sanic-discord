@@ -26,7 +26,14 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from .http import HttpClient
+<pre><code class="python">from sanic import Sanic, Request, HTTPResponse
+from nacl.signing import VerifyKey
+from nacl.exceptions import BadSignatureError
+
+from typing import List
+
+from .http import HttpClient
+from .errors import InvaildSignatureError
 
 
 class InteractionClient:
@@ -39,18 +46,39 @@ class InteractionClient:
         
     Attributes:
         http (HttpClient): The http client.
-        token (str): The bot token.
-        public_key (str): The public key.&#34;&#34;&#34;
-    def __init__(self, token: str, public_key: str):
-        self.http = HttpClient()
-        self.token = token
-        self.public_key = public_key
+        verify_key (nacl.signing.VerifyKey): The public key.&#34;&#34;&#34;
+    def __init__(self, app: Sanic, token: str, public_key: str):
+        self.app = app
+        self.http = HttpClient(token, public_key)
+        self.verify_key = VerifyKey(bytes.fromhex(public_key))
+        self.interaction_event: callable = None
 
     async def close(self) -&gt; None:
         &#34;&#34;&#34;
         Closes the client.
         &#34;&#34;&#34;
-        await self.http.close()</code></pre>
+        await self.http.close()
+
+    def on_interaction(self, func: callable) -&gt; callable:
+        &#34;&#34;&#34;
+        Decorator for handling interaction requests.
+        Interaction event cacher.&#34;&#34;&#34;
+        self.interaction_event = func
+        return func
+
+    async def handle_interaction(self, request: Request) -&gt; HTTPResponse:
+        &#34;&#34;&#34;
+        Handles an interaction request.
+        &#34;&#34;&#34;
+        signature = request.headers[&#34;X-Signature-Ed25519&#34;]
+        timestamp = request.headers[&#34;X-Signature-Timestamp&#34;]
+        body = request.body.decode(&#34;utf-8&#34;)
+        try:
+            self.verify_key.verify(f&#39;{timestamp}{body}&#39;.encode(), bytes.fromhex(signature))
+        except BadSignatureError:
+            raise InvaildSignatureError(&#34;Invalid signature&#34;)
+        else:
+            return await self.interaction_event(request.json)</code></pre>
 </details>
 </section>
 <section>
@@ -64,7 +92,7 @@ class InteractionClient:
 <dl>
 <dt id="sanic_discord.interaction.client.InteractionClient"><code class="flex name class">
 <span>class <span class="ident">InteractionClient</span></span>
-<span>(</span><span>token: str, public_key: str)</span>
+<span>(</span><span>app: sanic.app.Sanic, token: str, public_key: str)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>interaction client</p>
@@ -79,9 +107,7 @@ class InteractionClient:
 <dl>
 <dt><strong><code>http</code></strong> :&ensp;<code>HttpClient</code></dt>
 <dd>The http client.</dd>
-<dt><strong><code>token</code></strong> :&ensp;<code>str</code></dt>
-<dd>The bot token.</dd>
-<dt><strong><code>public_key</code></strong> :&ensp;<code>str</code></dt>
+<dt><strong><code>verify_key</code></strong> :&ensp;<code>nacl.signing.VerifyKey</code></dt>
 <dd>The public key.</dd>
 </dl></div>
 <details class="source">
@@ -98,18 +124,39 @@ class InteractionClient:
         
     Attributes:
         http (HttpClient): The http client.
-        token (str): The bot token.
-        public_key (str): The public key.&#34;&#34;&#34;
-    def __init__(self, token: str, public_key: str):
-        self.http = HttpClient()
-        self.token = token
-        self.public_key = public_key
+        verify_key (nacl.signing.VerifyKey): The public key.&#34;&#34;&#34;
+    def __init__(self, app: Sanic, token: str, public_key: str):
+        self.app = app
+        self.http = HttpClient(token, public_key)
+        self.verify_key = VerifyKey(bytes.fromhex(public_key))
+        self.interaction_event: callable = None
 
     async def close(self) -&gt; None:
         &#34;&#34;&#34;
         Closes the client.
         &#34;&#34;&#34;
-        await self.http.close()</code></pre>
+        await self.http.close()
+
+    def on_interaction(self, func: callable) -&gt; callable:
+        &#34;&#34;&#34;
+        Decorator for handling interaction requests.
+        Interaction event cacher.&#34;&#34;&#34;
+        self.interaction_event = func
+        return func
+
+    async def handle_interaction(self, request: Request) -&gt; HTTPResponse:
+        &#34;&#34;&#34;
+        Handles an interaction request.
+        &#34;&#34;&#34;
+        signature = request.headers[&#34;X-Signature-Ed25519&#34;]
+        timestamp = request.headers[&#34;X-Signature-Timestamp&#34;]
+        body = request.body.decode(&#34;utf-8&#34;)
+        try:
+            self.verify_key.verify(f&#39;{timestamp}{body}&#39;.encode(), bytes.fromhex(signature))
+        except BadSignatureError:
+            raise InvaildSignatureError(&#34;Invalid signature&#34;)
+        else:
+            return await self.interaction_event(request.json)</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -127,6 +174,48 @@ class InteractionClient:
     Closes the client.
     &#34;&#34;&#34;
     await self.http.close()</code></pre>
+</details>
+</dd>
+<dt id="sanic_discord.interaction.client.InteractionClient.handle_interaction"><code class="name flex">
+<span>async def <span class="ident">handle_interaction</span></span>(<span>self, request: sanic.request.Request) ‑> sanic.response.HTTPResponse</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Handles an interaction request.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def handle_interaction(self, request: Request) -&gt; HTTPResponse:
+    &#34;&#34;&#34;
+    Handles an interaction request.
+    &#34;&#34;&#34;
+    signature = request.headers[&#34;X-Signature-Ed25519&#34;]
+    timestamp = request.headers[&#34;X-Signature-Timestamp&#34;]
+    body = request.body.decode(&#34;utf-8&#34;)
+    try:
+        self.verify_key.verify(f&#39;{timestamp}{body}&#39;.encode(), bytes.fromhex(signature))
+    except BadSignatureError:
+        raise InvaildSignatureError(&#34;Invalid signature&#34;)
+    else:
+        return await self.interaction_event(request.json)</code></pre>
+</details>
+</dd>
+<dt id="sanic_discord.interaction.client.InteractionClient.on_interaction"><code class="name flex">
+<span>def <span class="ident">on_interaction</span></span>(<span>self, func: <built-in function callable>) ‑> <built-in function callable></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Decorator for handling interaction requests.
+Interaction event cacher.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def on_interaction(self, func: callable) -&gt; callable:
+    &#34;&#34;&#34;
+    Decorator for handling interaction requests.
+    Interaction event cacher.&#34;&#34;&#34;
+    self.interaction_event = func
+    return func</code></pre>
 </details>
 </dd>
 </dl>
@@ -151,6 +240,8 @@ class InteractionClient:
 <h4><code><a title="sanic_discord.interaction.client.InteractionClient" href="#sanic_discord.interaction.client.InteractionClient">InteractionClient</a></code></h4>
 <ul class="">
 <li><code><a title="sanic_discord.interaction.client.InteractionClient.close" href="#sanic_discord.interaction.client.InteractionClient.close">close</a></code></li>
+<li><code><a title="sanic_discord.interaction.client.InteractionClient.handle_interaction" href="#sanic_discord.interaction.client.InteractionClient.handle_interaction">handle_interaction</a></code></li>
+<li><code><a title="sanic_discord.interaction.client.InteractionClient.on_interaction" href="#sanic_discord.interaction.client.InteractionClient.on_interaction">on_interaction</a></code></li>
 </ul>
 </li>
 </ul>
