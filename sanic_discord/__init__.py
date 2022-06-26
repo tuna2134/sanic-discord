@@ -1,3 +1,6 @@
+"""
+.. include:: ../README.md
+"""
 from .oauth import *
 
 __version__ = "2.0.0a"
