@@ -24,4 +24,4 @@ jobs:
       - name: Upload package
         run: |
           twine check dist/*
-          twine -u "__token__" -p ${{ secrets.PYPI_ACCESS_TOKEN }} upload dist/*
+          twine upload -u "__token__" -p ${{ secrets.PYPI_ACCESS_TOKEN }} dist/*
