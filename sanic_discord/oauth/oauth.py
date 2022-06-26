@@ -1,6 +1,5 @@
 "Oauth2 client for sanic."
 from httpx import AsyncClient, Response
-from requests import Response
 from sanic import Sanic, Request
 
 from typing import List, Optional
