@@ -61,7 +61,7 @@ async def index(request):
 
 @app.before_server_stop
 async def close_client(app, loop):
-    print(&quot;CLosing oauth client...&quot;)
+    print(&quot;Closing oauth client...&quot;)
     await oauth2.close()
 
 app.run(&quot;0.0.0.0&quot;)
