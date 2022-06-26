@@ -22,7 +22,7 @@ class InteractionClient:
     def __init__(self, app: Sanic, token: str, public_key: str):
         self.app = app
         self.http = HttpClient(token, public_key)
-        self.verify_key = VerifyKey(public_key)
+        self.verify_key = VerifyKey(bytes.fromhex(public_key))
         self.interaction_event: callable = None
 
     async def close(self) -> None:

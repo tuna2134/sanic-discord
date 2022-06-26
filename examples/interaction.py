@@ -2,9 +2,13 @@ from sanic import Sanic, response
 
 from sanic_discord import InteractionClient
 
+from os import getenv
+
 
 app = Sanic(__name__)
-client = InteractionClient(app, "token", "public_key")
+client = InteractionClient(
+    app, getenv("CLIENT_TOKEN"), getenv("PUBLIC_KEY")
+)
 
 
 @app.get("/")
@@ -19,4 +23,4 @@ async def interaction(request):
 async def on_interaction(data):
     pass
 
-app.run(host="0.0.0.0")
+app.run(host="0.0.0.0", port=8080)
