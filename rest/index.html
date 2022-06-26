@@ -98,7 +98,7 @@ __all__ = (&#34;RestClient&#34;,)</code></pre>
         Returns:
             httpx.Response: The response from the request.&#34;&#34;&#34;
         for _ in range(10):
-            r = await self.client.request(method, self.BASEURL + path, **kwargs)
+            r = await self.client.request(method, self.BASEURL + path, *args, **kwargs)
             if r.status_code == 200:
                 return r.json()
             elif r.status_code == 404:
@@ -182,7 +182,7 @@ __all__ = (&#34;RestClient&#34;,)</code></pre>
     Returns:
         httpx.Response: The response from the request.&#34;&#34;&#34;
     for _ in range(10):
-        r = await self.client.request(method, self.BASEURL + path, **kwargs)
+        r = await self.client.request(method, self.BASEURL + path, *args, **kwargs)
         if r.status_code == 200:
             return r.json()
         elif r.status_code == 404:

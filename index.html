@@ -346,7 +346,7 @@ __all__ = (
         &#34;&#34;&#34;
         def decorator(func):
             @wraps(func)
-            async def wrapper(request: Request, *args, **kwargs):
+            async def wrapper(request: Request, *args, **kwargs) -&gt; HTTPResponse:
                 code = request.args.get(&#34;code&#34;)
                 if code is None:
                     raise OauthException(&#34;No code provided&#34;)
@@ -383,7 +383,7 @@ __all__ = (
             refresh_token, self.client_id, self.client_secret
         ), self.http)
 
-    def get_authorize_url(self, scope: Optional[List[str]] = [&#34;identify&#34;]) -&gt; str:
+    def get_authorize_url(self, scope: Optional[List[str]] = None) -&gt; str:
         &#34;&#34;&#34;
         Generates a URL to authorize the application.
 
@@ -394,7 +394,8 @@ __all__ = (
             str: The URL to authorize the application.
         &#34;&#34;&#34;
         return f&#34;{self.http.BASEURL}/oauth2/authorize&#34; \
-            f&#34;?client_id={self.client_id}&amp;scope={&#39; &#39;.join(scope)}&#34; \
+            f&#34;?client_id={self.client_id}&#34; \
+            f&#34;&amp;scope={&#39; &#39;.join(scope) if scope is not None else &#39;identify&#39;}&#34; \
             f&#34;&amp;response_type=code&amp;redirect_uri={self.redirect_uri}&#34;</code></pre>
 </details>
 <h3>Methods</h3>
@@ -430,7 +431,7 @@ __all__ = (
     &#34;&#34;&#34;
     def decorator(func):
         @wraps(func)
-        async def wrapper(request: Request, *args, **kwargs):
+        async def wrapper(request: Request, *args, **kwargs) -&gt; HTTPResponse:
             code = request.args.get(&#34;code&#34;)
             if code is None:
                 raise OauthException(&#34;No code provided&#34;)
@@ -475,7 +476,7 @@ __all__ = (
 </details>
 </dd>
 <dt id="sanic_discord.Oauth2.get_authorize_url"><code class="name flex">
-<span>def <span class="ident">get_authorize_url</span></span>(<span>self, scope: Optional[List[str]] = ['identify']) ‑> str</span>
+<span>def <span class="ident">get_authorize_url</span></span>(<span>self, scope: Optional[List[str]] = None) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Generates a URL to authorize the application.</p>
@@ -493,7 +494,7 @@ __all__ = (
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_authorize_url(self, scope: Optional[List[str]] = [&#34;identify&#34;]) -&gt; str:
+<pre><code class="python">def get_authorize_url(self, scope: Optional[List[str]] = None) -&gt; str:
     &#34;&#34;&#34;
     Generates a URL to authorize the application.
 
@@ -504,7 +505,8 @@ __all__ = (
         str: The URL to authorize the application.
     &#34;&#34;&#34;
     return f&#34;{self.http.BASEURL}/oauth2/authorize&#34; \
-        f&#34;?client_id={self.client_id}&amp;scope={&#39; &#39;.join(scope)}&#34; \
+        f&#34;?client_id={self.client_id}&#34; \
+        f&#34;&amp;scope={&#39; &#39;.join(scope) if scope is not None else &#39;identify&#39;}&#34; \
         f&#34;&amp;response_type=code&amp;redirect_uri={self.redirect_uri}&#34;</code></pre>
 </details>
 </dd>
