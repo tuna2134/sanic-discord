@@ -1,5 +1,5 @@
 "Oauth2 client for sanic."
-from sanic import Sanic, Request
+from sanic import Sanic, Request, HTTPResponse
 
 from typing import List, Optional
 
@@ -48,7 +48,7 @@ class Oauth2:
         """
         def decorator(func):
             @wraps(func)
-            async def wrapper(request: Request, *args, **kwargs):
+            async def wrapper(request: Request, *args, **kwargs) -> HTTPResponse:
                 code = request.args.get("code")
                 if code is None:
                     raise OauthException("No code provided")
@@ -85,7 +85,7 @@ class Oauth2:
             refresh_token, self.client_id, self.client_secret
         ), self.http)
 
-    def get_authorize_url(self, scope: Optional[List[str]] = ["identify"]) -> str:
+    def get_authorize_url(self, scope: Optional[List[str]] = None) -> str:
         """
         Generates a URL to authorize the application.
 
@@ -96,5 +96,6 @@ class Oauth2:
             str: The URL to authorize the application.
         """
         return f"{self.http.BASEURL}/oauth2/authorize" \
-            f"?client_id={self.client_id}&scope={' '.join(scope)}" \
+            f"?client_id={self.client_id}" \
+            f"&scope={' '.join(scope) if scope is not None else 'identify'}" \
             f"&response_type=code&redirect_uri={self.redirect_uri}"

@@ -1,8 +1,4 @@
-from httpx import AsyncClient
-
-import asyncio
-
-from ..rest import RestClient
+from sanic_discord.rest import RestClient
 
 
 class HttpClient(RestClient):

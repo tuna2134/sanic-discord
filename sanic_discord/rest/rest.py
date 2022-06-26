@@ -35,7 +35,7 @@ class RestClient:
         Returns:
             httpx.Response: The response from the request."""
         for _ in range(10):
-            r = await self.client.request(method, self.BASEURL + path, **kwargs)
+            r = await self.client.request(method, self.BASEURL + path, *args, **kwargs)
             if r.status_code == 200:
                 return r.json()
             elif r.status_code == 404:

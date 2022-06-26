@@ -21,7 +21,7 @@ async def redirect(_, access_token):
 
 @app.get("/login")
 async def login(_):
-    return response.redirect(oauth2.get_authorize_url(["identify", "email"]))
+    return response.redirect(oauth2.get_authorize_url())
 
 @app.get("/me")
 async def me(request):
