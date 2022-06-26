@@ -21,8 +21,12 @@ def _get_version(filename):
 
 version = _get_version("sanic_discord/__init__.py")
 if version.endswith("a"):
-    result = subprocess.run(["git", "log", "--oneline", "-1"], stdout=subprocess.PIPE)
-    version += "+g" + result.stdout.decode().split()[0]
+    try:
+        result = subprocess.run(["git", "log", "--oneline", "-1"], stdout=subprocess.PIPE)
+    except Exception:
+        pass
+    else:
+        version += "+g" + result.stdout.decode().split()[0]
 
 setup(
     name="sanic-discord",
