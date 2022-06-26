@@ -31,4 +31,9 @@ async def index(request):
         )
     return response.redirect("/login")
 
+@app.before_server_stop
+async def close_client(app, loop):
+    print("CLosing oauth client...")
+    await oauth2.close()
+
 app.run("0.0.0.0")
