@@ -24,7 +24,7 @@ class HttpClient:
     async def request(self, method: str, path: str, *args, **kwargs) -> dict:
         """
         Makes a request to the Discord API.
-        
+      
         Args:
             method (str): The HTTP method to use.
             path (str): The path to request.
