@@ -1,5 +1,9 @@
 # sanic-discord.oauth
 
+## About
+
+This is for discord oauth2.
+
 ## Example
 
 ```python
