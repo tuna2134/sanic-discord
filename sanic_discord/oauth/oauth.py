@@ -21,14 +21,12 @@ class Oauth2:
         redirect_uri (str): The redirect URI.
 
     Attributes:
-        url (str): The URL to the Discord API.
         app (Sanic): The Sanic app.
         client_id (int): The client ID.
         client_secret (str): The client secret.
         redirect_uri (str): The redirect URI.
         client (httpx.AsyncClient): The client used to make requests.
     """
-    url: str = "https://discord.com/api/v10"
     def __init__(
         self, app: Sanic, client_id: int, client_secret: str, redirect_uri: str
     ):
@@ -45,6 +43,9 @@ class Oauth2:
         await self.http.close()
 
     def exchange_code(self):
+        """
+        Exchanges a code for an access token.
+        """
         def decorator(func):
             @wraps(func)
             async def wrapper(request: Request, *args, **kwargs):
@@ -94,6 +95,6 @@ class Oauth2:
         Returns:
             str: The URL to authorize the application.
         """
-        return f"{self.url}/oauth2/authorize" \
+        return f"{self.http.BASEURL}/oauth2/authorize" \
             f"?client_id={self.client_id}&scope={' '.join(scope)}" \
             f"&response_type=code&redirect_uri={self.redirect_uri}"
