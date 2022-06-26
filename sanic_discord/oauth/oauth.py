@@ -90,7 +90,7 @@ class Oauth2:
         Generates a URL to authorize the application.
 
         Args:
-            scope (List[str], optional): The scope to request. Defaults to ["identify"].
+            scope (Optional[List[str]]): The scope to request. Defaults to ["identify"].
 
         Returns:
             str: The URL to authorize the application.
