@@ -4,6 +4,10 @@
 
 [Documentation](https://mc-fdc.me/sanic-discord)
 
+[![Downloads](https://pepy.tech/badge/sanic-discord)](https://pepy.tech/project/sanic-discord)
+[![Downloads](https://pepy.tech/badge/sanic-discord/month)](https://pepy.tech/project/sanic-discord)
+[![Downloads](https://pepy.tech/badge/sanic-discord/week)](https://pepy.tech/project/sanic-discord)
+
 ## Install
 
 ```bash
