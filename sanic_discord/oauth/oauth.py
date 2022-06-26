@@ -1,5 +1,9 @@
-from httpx import AsyncClient
+"Oauth2 client for sanic."
+from httpx import AsyncClient, Response
+from requests import Response
 from sanic import Sanic, Request
+
+from typing import List, Optional
 
 from functools import wraps
 
@@ -8,6 +12,23 @@ from .access_token import AccessToken
 
 
 class Oauth2:
+    """
+    The following methods are used to generate the URL to redirect to.
+    
+    Args:
+        app (Sanic): The Sanic app.
+        client_id (int): The client ID.
+        client_secret (str): The client secret.
+        redirect_uri (str): The redirect URI.
+
+    Attributes:
+        url (str): The URL to the Discord API.
+        app (Sanic): The Sanic app.
+        client_id (int): The client ID.
+        client_secret (str): The client secret.
+        redirect_uri (str): The redirect URI.
+        client (httpx.AsyncClient): The client used to make requests.
+    """
     url: str = "https://discord.com/api/v10"
     def __init__(
         self, app: Sanic, client_id: int, client_secret: str, redirect_uri: str
@@ -16,9 +37,26 @@ class Oauth2:
         self.client_id = client_id
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
-        self.client = AsyncClient()
+        self.client: AsyncClient = AsyncClient()
 
-    async def request(self, method: str, path: str, *args, **kwargs):
+    async def close(self) -> None:
+        """
+        Closes the client.
+        """
+        await self.client.aclose()
+
+    async def request(self, method: str, path: str, *args, **kwargs) -> Response:
+        """
+        Makes a request to the Discord API.
+        
+        Args:
+            method (str): The HTTP method to use.
+            path (str): The path to request.
+            *args: Any additional arguments to pass to the request.
+            **kwargs: Any additional keyword arguments to pass to the request.
+        
+        Returns:
+            httpx.Response: The response from the request."""
         return await self.client.request(method, self.url + path, **kwargs)
 
     def exchange_code(self):
@@ -44,7 +82,33 @@ class Oauth2:
             return wrapper
         return decorator
 
-    async def refresh_token(self, refresh_token: str):
+    async def fetch_user(self, access_token: str) -> dict:
+        """
+        Fetches the user's profile using an access token.
+        
+        Args:
+            access_token (str): The access token to use.
+            
+        Returns:
+            dict: The user's profile.
+        """
+        return (await self.request(
+            "GET",
+            "/users/@me", headers={
+                "Authorization": f"Bearer {access_token}"
+            }
+        )).json()
+
+    async def refresh_token(self, refresh_token: str) -> AccessToken:
+        """
+        Refreshes an access token using a refresh token.
+
+        Args:
+            refresh_token (str): The refresh token to use.
+
+        Returns:
+            AccessToken: The new access token.
+        """
         r = await self.request(
             "POST",
             "/oauth2/token", data={
@@ -57,3 +121,18 @@ class Oauth2:
             }
         )
         return AccessToken(r.json())
+
+    def get_authorize_url(self, scope: Optional[List[str]] = ["identify"]) -> str:
+        """
+        Generates a URL to authorize the application.
+
+        Args:
+            scope (List[str], optional): The scope to request. Defaults to ["identify"].
+
+        Returns:
+            str: The URL to authorize the application.
+        """
+        scope = " ".join(scope)
+        return f"{self.url}/oauth2/authorize" \
+            f"?client_id={self.client_id}&scope={scope}" \
+            f"&response_type=code&redirect_uri={self.redirect_uri}"

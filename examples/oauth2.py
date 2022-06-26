@@ -19,4 +19,16 @@ async def redirect(request, access_token):
     r.cookies["access_token"]["expires"] = access_token.expires_in
     return r
 
+@app.get("/login")
+async def login(request):
+    return response.redirect(oauth2.get_authorize_url(["identify", "email"]))
+
+@app.get("/")
+async def index(request):
+    if "access_token" in request.cookies:
+        return response.json(
+            await oauth2.fetch_user(request.cookies["access_token"])
+        )
+    return response.redirect("/login")
+
 app.run("0.0.0.0")
