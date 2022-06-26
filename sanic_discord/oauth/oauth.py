@@ -1,5 +1,4 @@
 "Oauth2 client for sanic."
-from httpx import AsyncClient, Response
 from sanic import Sanic, Request
 
 from typing import List, Optional
@@ -8,6 +7,7 @@ from functools import wraps
 
 from .errors import OauthException
 from .access_token import AccessToken
+from .http import HttpClient
 
 
 class Oauth2:
@@ -36,27 +36,13 @@ class Oauth2:
         self.client_id = client_id
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
-        self.client: AsyncClient = AsyncClient()
+        self.http = HttpClient()
 
     async def close(self) -> None:
         """
         Closes the client.
         """
-        await self.client.aclose()
-
-    async def request(self, method: str, path: str, *args, **kwargs) -> Response:
-        """
-        Makes a request to the Discord API.
-        
-        Args:
-            method (str): The HTTP method to use.
-            path (str): The path to request.
-            *args: Any additional arguments to pass to the request.
-            **kwargs: Any additional keyword arguments to pass to the request.
-        
-        Returns:
-            httpx.Response: The response from the request."""
-        return await self.client.request(method, self.url + path, **kwargs)
+        await self.http.close()
 
     def exchange_code(self):
         def decorator(func):
@@ -65,19 +51,10 @@ class Oauth2:
                 code = request.args.get("code")
                 if code is None:
                     raise OauthException("No code provided")
-                r = await self.request(
-                    "POST",
-                    "/oauth2/token", data={
-                        "grant_type": "authorization_code",
-                        "code": code,
-                        "redirect_uri": self.redirect_uri,
-                        "client_id": self.client_id,
-                        "client_secret": self.client_secret
-                    }, headers={
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    }
-                )
-                return await func(request, AccessToken(r.json()), *args, **kwargs)
+                return await func(request, AccessToken(
+                    await self.http.exchange_code(
+                        code, self.redirect_uri, self.client_id, self.client_secret
+                    ), self.http), *args, **kwargs)
             return wrapper
         return decorator
 
@@ -91,12 +68,7 @@ class Oauth2:
         Returns:
             dict: The user's profile.
         """
-        return (await self.request(
-            "GET",
-            "/users/@me", headers={
-                "Authorization": f"Bearer {access_token}"
-            }
-        )).json()
+        return await self.http.fetch_user(access_token)
 
     async def refresh_token(self, refresh_token: str) -> AccessToken:
         """
@@ -108,18 +80,9 @@ class Oauth2:
         Returns:
             AccessToken: The new access token.
         """
-        r = await self.request(
-            "POST",
-            "/oauth2/token", data={
-                "grant_type": "refresh_token",
-                "refresh_token": refresh_token,
-                "client_id": self.client_id,
-                "client_secret": self.client_secret
-            }, headers={
-                "Content-Type": "application/x-www-form-urlencoded"
-            }
-        )
-        return AccessToken(r.json())
+        return AccessToken(await self.http.refresh_token(
+            refresh_token, self.client_id, self.client_secret
+        ), self.http)
 
     def get_authorize_url(self, scope: Optional[List[str]] = ["identify"]) -> str:
         """

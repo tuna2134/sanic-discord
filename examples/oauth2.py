@@ -17,6 +17,7 @@ async def redirect(_, access_token):
     r = response.redirect("/")
     r.cookies["access_token"] = access_token.access_token
     r.cookies["access_token"]["expires"] = access_token.expires_in
+    print(await access_token.fetch_user())
     return r
 
 @app.get("/login")
