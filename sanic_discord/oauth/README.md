@@ -23,7 +23,7 @@ oauth2 = Oauth2(
 @app.get("/callback")
 @oauth2.exchange_code()
 async def redirect(_, access_token):
-    r = response.json({"access_token": access_token.access_token})
+    r = response.redirect("/me")
     r.cookies["access_token"] = access_token.access_token
     r.cookies["access_token"]["expires"] = access_token.expires_in
     return r
@@ -32,13 +32,16 @@ async def redirect(_, access_token):
 async def login(_):
     return response.redirect(oauth2.get_authorize_url(["identify", "email"]))
 
-@app.get("/")
-async def index(request):
+@app.get("/me")
+async def me(request):
     if "access_token" in request.cookies:
-        return response.json(
-            await oauth2.fetch_user(request.cookies["access_token"])
-        )
+        data = await oauth2.fetch_user(request.cookies["access_token"])
+        return response.text(f"hello {data['username']}")
     return response.redirect("/login")
+
+@app.get("/")
+async def index(_):
+    return response.text("hello world")
 
 @app.before_server_stop
 async def close_client(app, loop):
