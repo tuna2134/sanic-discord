@@ -34,7 +34,8 @@ setup(
     author_email="support@mc-fdc.live",
     url="https://github.com/tuna2134/sanic-discord",
     license="MIT",
-    packages=find_packages(exclude=["examples", "py.typed"]),
+    packages=find_packages(exclude=["examples"]),
+    package_data={"sanic_discord": ("py.typed",)},
     install_requires=requirements,
     classifiers=[
         "Development Status :: 5 - Production/Stable",

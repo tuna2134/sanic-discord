@@ -13,14 +13,14 @@ oauth2 = Oauth2(
 
 @app.get("/callback")
 @oauth2.exchange_code()
-async def redirect(request, access_token):
+async def redirect(_, access_token):
     r = response.json({"access_token": access_token.access_token})
     r.cookies["access_token"] = access_token.access_token
     r.cookies["access_token"]["expires"] = access_token.expires_in
     return r
 
 @app.get("/login")
-async def login(request):
+async def login(_):
     return response.redirect(oauth2.get_authorize_url(["identify", "email"]))
 
 @app.get("/")
