@@ -489,12 +489,15 @@ dict(one=1, two=2)</p></div>
 <span>(</span><span>message: Union[str, bytes, ForwardRef(None)] = None, status_code: Optional[int] = None, quiet: Optional[bool] = None, context: Optional[Dict[str, Any]] = None, extra: Optional[Dict[str, Any]] = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
+<div class="desc"><p>The base exception for all Oauth2 exceptions.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class OauthException(SanicException):
+    &#34;&#34;&#34;
+    The base exception for all Oauth2 exceptions.
+    &#34;&#34;&#34;
     status_code = 403</code></pre>
 </details>
 <h3>Ancestors</h3>

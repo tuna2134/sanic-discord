@@ -30,12 +30,20 @@
 
 
 class OauthException(SanicException):
+    &#34;&#34;&#34;
+    The base exception for all Oauth2 exceptions.
+    &#34;&#34;&#34;
     status_code = 403
 
 class HttpException(SanicException):
+    &#34;&#34;&#34;
+    The base exception for all HTTP exceptions.
+    &#34;&#34;&#34;
     status_code = 500
 
-class NotFoundException(SanicException):
+class NotFoundException(HttpException):
+    &#34;&#34;&#34;
+    If the request returns a 404.&#34;&#34;&#34;
     status_code = 404</code></pre>
 </details>
 </section>
@@ -53,12 +61,15 @@ class NotFoundException(SanicException):
 <span>(</span><span>message: Union[str, bytes, ForwardRef(None)] = None, status_code: Optional[int] = None, quiet: Optional[bool] = None, context: Optional[Dict[str, Any]] = None, extra: Optional[Dict[str, Any]] = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
+<div class="desc"><p>The base exception for all HTTP exceptions.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class HttpException(SanicException):
+    &#34;&#34;&#34;
+    The base exception for all HTTP exceptions.
+    &#34;&#34;&#34;
     status_code = 500</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -66,6 +77,10 @@ class NotFoundException(SanicException):
 <li>sanic.exceptions.SanicException</li>
 <li>builtins.Exception</li>
 <li>builtins.BaseException</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="sanic_discord.oauth.errors.NotFoundException" href="#sanic_discord.oauth.errors.NotFoundException">NotFoundException</a></li>
 </ul>
 <h3>Class variables</h3>
 <dl>
@@ -80,16 +95,19 @@ class NotFoundException(SanicException):
 <span>(</span><span>message: Union[str, bytes, ForwardRef(None)] = None, status_code: Optional[int] = None, quiet: Optional[bool] = None, context: Optional[Dict[str, Any]] = None, extra: Optional[Dict[str, Any]] = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
+<div class="desc"><p>If the request returns a 404.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class NotFoundException(SanicException):
+<pre><code class="python">class NotFoundException(HttpException):
+    &#34;&#34;&#34;
+    If the request returns a 404.&#34;&#34;&#34;
     status_code = 404</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
+<li><a title="sanic_discord.oauth.errors.HttpException" href="#sanic_discord.oauth.errors.HttpException">HttpException</a></li>
 <li>sanic.exceptions.SanicException</li>
 <li>builtins.Exception</li>
 <li>builtins.BaseException</li>
@@ -107,12 +125,15 @@ class NotFoundException(SanicException):
 <span>(</span><span>message: Union[str, bytes, ForwardRef(None)] = None, status_code: Optional[int] = None, quiet: Optional[bool] = None, context: Optional[Dict[str, Any]] = None, extra: Optional[Dict[str, Any]] = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
+<div class="desc"><p>The base exception for all Oauth2 exceptions.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class OauthException(SanicException):
+    &#34;&#34;&#34;
+    The base exception for all Oauth2 exceptions.
+    &#34;&#34;&#34;
     status_code = 403</code></pre>
 </details>
 <h3>Ancestors</h3>
