@@ -8,6 +8,8 @@ __author__ = "tuna2134"
 __all__ = (
     "Oauth2",
     "OauthException",
+    "HttpException",
+    "NotFoundException",
     "AccessToken",
     "AccessTokenType"
 )
