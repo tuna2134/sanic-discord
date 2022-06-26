@@ -14,7 +14,7 @@ oauth2 = Oauth2(
 @app.get("/callback")
 @oauth2.exchange_code()
 async def redirect(_, access_token):
-    r = response.json({"access_token": access_token.access_token})
+    r = response.redirect("/")
     r.cookies["access_token"] = access_token.access_token
     r.cookies["access_token"]["expires"] = access_token.expires_in
     return r

@@ -131,7 +131,6 @@ class Oauth2:
         Returns:
             str: The URL to authorize the application.
         """
-        scope = " ".join(scope)
         return f"{self.url}/oauth2/authorize" \
-            f"?client_id={self.client_id}&scope={scope}" \
+            f"?client_id={self.client_id}&scope={' '.join(scope)}" \
             f"&response_type=code&redirect_uri={self.redirect_uri}"
