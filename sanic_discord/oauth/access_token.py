@@ -6,6 +6,8 @@ from datetime import datetime, timedelta
 
 
 class AccessTokenType(TypedDict):
+    """
+    The type of the access token."""
     access_token: str
     token_type: str
     expires_in: int
