@@ -9,10 +9,9 @@ with open('README.md', 'r') as f:
 with open('requirements.txt', 'r') as f:
     requirements = f.readlines()
 
-def _get_version(filename):
+def _get_version(filename: str):
     with open(filename, "r") as f:
         lines = f.readlines()
-    version = None
     for line in lines:
         if "__version__" in line:
             version = line.split()[2]
