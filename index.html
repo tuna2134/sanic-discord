@@ -29,7 +29,13 @@
 <pre><code class="python">from .oauth import *
 
 __version__ = &#34;2.0.0a&#34;
-__author__ = &#34;tuna2134&#34;</code></pre>
+__author__ = &#34;tuna2134&#34;
+__all__ = (
+    &#34;Oauth2&#34;,
+    &#34;OauthException&#34;,
+    &#34;AccessToken&#34;,
+    &#34;AccessTokenType&#34;
+)</code></pre>
 </details>
 </section>
 <section>
@@ -46,6 +52,510 @@ __author__ = &#34;tuna2134&#34;</code></pre>
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="sanic_discord.AccessToken"><code class="flex name class">
+<span>class <span class="ident">AccessToken</span></span>
+<span>(</span><span>data: <a title="sanic_discord.oauth.access_token.AccessTokenType" href="oauth/access_token.html#sanic_discord.oauth.access_token.AccessTokenType">AccessTokenType</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AccessToken:
+    def __init__(self, data: AccessTokenType):
+        self.data = data
+        self.access_token = data[&#34;access_token&#34;]
+        self.token_type = data[&#34;token_type&#34;]
+        self.refresh_token = data[&#34;refresh_token&#34;]
+        self.scope = data[&#34;scope&#34;]
+
+    @property
+    def expires_in(self) -&gt; datetime:
+        return datetime.now() + timedelta(seconds=self.data[&#34;expires_in&#34;])</code></pre>
+</details>
+<h3>Instance variables</h3>
+<dl>
+<dt id="sanic_discord.AccessToken.expires_in"><code class="name">var <span class="ident">expires_in</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def expires_in(self) -&gt; datetime:
+    return datetime.now() + timedelta(seconds=self.data[&#34;expires_in&#34;])</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="sanic_discord.AccessTokenType"><code class="flex name class">
+<span>class <span class="ident">AccessTokenType</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>dict() -&gt; new empty dictionary
+dict(mapping) -&gt; new dictionary initialized from a mapping object's
+(key, value) pairs
+dict(iterable) -&gt; new dictionary initialized as if via:
+d = {}
+for k, v in iterable:
+d[k] = v
+dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
+in the keyword argument list.
+For example:
+dict(one=1, two=2)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AccessTokenType(TypedDict):
+    access_token: str
+    token_type: str
+    expires_in: int
+    refresh_token: str
+    scope: str</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.dict</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="sanic_discord.AccessTokenType.access_token"><code class="name">var <span class="ident">access_token</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="sanic_discord.AccessTokenType.expires_in"><code class="name">var <span class="ident">expires_in</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="sanic_discord.AccessTokenType.refresh_token"><code class="name">var <span class="ident">refresh_token</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="sanic_discord.AccessTokenType.scope"><code class="name">var <span class="ident">scope</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="sanic_discord.AccessTokenType.token_type"><code class="name">var <span class="ident">token_type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="sanic_discord.Oauth2"><code class="flex name class">
+<span>class <span class="ident">Oauth2</span></span>
+<span>(</span><span>app: sanic.app.Sanic, client_id: int, client_secret: str, redirect_uri: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>The following methods are used to generate the URL to redirect to.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>app</code></strong> :&ensp;<code>Sanic</code></dt>
+<dd>The Sanic app.</dd>
+<dt><strong><code>client_id</code></strong> :&ensp;<code>int</code></dt>
+<dd>The client ID.</dd>
+<dt><strong><code>client_secret</code></strong> :&ensp;<code>str</code></dt>
+<dd>The client secret.</dd>
+<dt><strong><code>redirect_uri</code></strong> :&ensp;<code>str</code></dt>
+<dd>The redirect URI.</dd>
+</dl>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>url</code></strong> :&ensp;<code>str</code></dt>
+<dd>The URL to the Discord API.</dd>
+<dt><strong><code>app</code></strong> :&ensp;<code>Sanic</code></dt>
+<dd>The Sanic app.</dd>
+<dt><strong><code>client_id</code></strong> :&ensp;<code>int</code></dt>
+<dd>The client ID.</dd>
+<dt><strong><code>client_secret</code></strong> :&ensp;<code>str</code></dt>
+<dd>The client secret.</dd>
+<dt><strong><code>redirect_uri</code></strong> :&ensp;<code>str</code></dt>
+<dd>The redirect URI.</dd>
+<dt><strong><code>client</code></strong> :&ensp;<code>httpx.AsyncClient</code></dt>
+<dd>The client used to make requests.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Oauth2:
+    &#34;&#34;&#34;
+    The following methods are used to generate the URL to redirect to.
+    
+    Args:
+        app (Sanic): The Sanic app.
+        client_id (int): The client ID.
+        client_secret (str): The client secret.
+        redirect_uri (str): The redirect URI.
+
+    Attributes:
+        url (str): The URL to the Discord API.
+        app (Sanic): The Sanic app.
+        client_id (int): The client ID.
+        client_secret (str): The client secret.
+        redirect_uri (str): The redirect URI.
+        client (httpx.AsyncClient): The client used to make requests.
+    &#34;&#34;&#34;
+    url: str = &#34;https://discord.com/api/v10&#34;
+    def __init__(
+        self, app: Sanic, client_id: int, client_secret: str, redirect_uri: str
+    ):
+        self.app = app
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.redirect_uri = redirect_uri
+        self.client: AsyncClient = AsyncClient()
+
+    async def close(self) -&gt; None:
+        &#34;&#34;&#34;
+        Closes the client.
+        &#34;&#34;&#34;
+        await self.client.aclose()
+
+    async def request(self, method: str, path: str, *args, **kwargs) -&gt; Response:
+        &#34;&#34;&#34;
+        Makes a request to the Discord API.
+        
+        Args:
+            method (str): The HTTP method to use.
+            path (str): The path to request.
+            *args: Any additional arguments to pass to the request.
+            **kwargs: Any additional keyword arguments to pass to the request.
+        
+        Returns:
+            httpx.Response: The response from the request.&#34;&#34;&#34;
+        return await self.client.request(method, self.url + path, **kwargs)
+
+    def exchange_code(self):
+        def decorator(func):
+            @wraps(func)
+            async def wrapper(request: Request, *args, **kwargs):
+                code = request.args.get(&#34;code&#34;)
+                if code is None:
+                    raise OauthException(&#34;No code provided&#34;)
+                r = await self.request(
+                    &#34;POST&#34;,
+                    &#34;/oauth2/token&#34;, data={
+                        &#34;grant_type&#34;: &#34;authorization_code&#34;,
+                        &#34;code&#34;: code,
+                        &#34;redirect_uri&#34;: self.redirect_uri,
+                        &#34;client_id&#34;: self.client_id,
+                        &#34;client_secret&#34;: self.client_secret
+                    }, headers={
+                        &#34;Content-Type&#34;: &#34;application/x-www-form-urlencoded&#34;
+                    }
+                )
+                return await func(request, AccessToken(r.json()), *args, **kwargs)
+            return wrapper
+        return decorator
+
+    async def fetch_user(self, access_token: str) -&gt; dict:
+        &#34;&#34;&#34;
+        Fetches the user&#39;s profile using an access token.
+        
+        Args:
+            access_token (str): The access token to use.
+            
+        Returns:
+            dict: The user&#39;s profile.
+        &#34;&#34;&#34;
+        return (await self.request(
+            &#34;GET&#34;,
+            &#34;/users/@me&#34;, headers={
+                &#34;Authorization&#34;: f&#34;Bearer {access_token}&#34;
+            }
+        )).json()
+
+    async def refresh_token(self, refresh_token: str) -&gt; AccessToken:
+        &#34;&#34;&#34;
+        Refreshes an access token using a refresh token.
+
+        Args:
+            refresh_token (str): The refresh token to use.
+
+        Returns:
+            AccessToken: The new access token.
+        &#34;&#34;&#34;
+        r = await self.request(
+            &#34;POST&#34;,
+            &#34;/oauth2/token&#34;, data={
+                &#34;grant_type&#34;: &#34;refresh_token&#34;,
+                &#34;refresh_token&#34;: refresh_token,
+                &#34;client_id&#34;: self.client_id,
+                &#34;client_secret&#34;: self.client_secret
+            }, headers={
+                &#34;Content-Type&#34;: &#34;application/x-www-form-urlencoded&#34;
+            }
+        )
+        return AccessToken(r.json())
+
+    def get_authorize_url(self, scope: Optional[List[str]] = [&#34;identify&#34;]) -&gt; str:
+        &#34;&#34;&#34;
+        Generates a URL to authorize the application.
+
+        Args:
+            scope (List[str], optional): The scope to request. Defaults to [&#34;identify&#34;].
+
+        Returns:
+            str: The URL to authorize the application.
+        &#34;&#34;&#34;
+        scope = &#34; &#34;.join(scope)
+        return f&#34;{self.url}/oauth2/authorize&#34; \
+            f&#34;?client_id={self.client_id}&amp;scope={scope}&#34; \
+            f&#34;&amp;response_type=code&amp;redirect_uri={self.redirect_uri}&#34;</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="sanic_discord.Oauth2.url"><code class="name">var <span class="ident">url</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="sanic_discord.Oauth2.close"><code class="name flex">
+<span>async def <span class="ident">close</span></span>(<span>self) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Closes the client.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def close(self) -&gt; None:
+    &#34;&#34;&#34;
+    Closes the client.
+    &#34;&#34;&#34;
+    await self.client.aclose()</code></pre>
+</details>
+</dd>
+<dt id="sanic_discord.Oauth2.exchange_code"><code class="name flex">
+<span>def <span class="ident">exchange_code</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def exchange_code(self):
+    def decorator(func):
+        @wraps(func)
+        async def wrapper(request: Request, *args, **kwargs):
+            code = request.args.get(&#34;code&#34;)
+            if code is None:
+                raise OauthException(&#34;No code provided&#34;)
+            r = await self.request(
+                &#34;POST&#34;,
+                &#34;/oauth2/token&#34;, data={
+                    &#34;grant_type&#34;: &#34;authorization_code&#34;,
+                    &#34;code&#34;: code,
+                    &#34;redirect_uri&#34;: self.redirect_uri,
+                    &#34;client_id&#34;: self.client_id,
+                    &#34;client_secret&#34;: self.client_secret
+                }, headers={
+                    &#34;Content-Type&#34;: &#34;application/x-www-form-urlencoded&#34;
+                }
+            )
+            return await func(request, AccessToken(r.json()), *args, **kwargs)
+        return wrapper
+    return decorator</code></pre>
+</details>
+</dd>
+<dt id="sanic_discord.Oauth2.fetch_user"><code class="name flex">
+<span>async def <span class="ident">fetch_user</span></span>(<span>self, access_token: str) ‑> dict</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Fetches the user's profile using an access token.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>access_token</code></strong> :&ensp;<code>str</code></dt>
+<dd>The access token to use.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict</code></dt>
+<dd>The user's profile.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def fetch_user(self, access_token: str) -&gt; dict:
+    &#34;&#34;&#34;
+    Fetches the user&#39;s profile using an access token.
+    
+    Args:
+        access_token (str): The access token to use.
+        
+    Returns:
+        dict: The user&#39;s profile.
+    &#34;&#34;&#34;
+    return (await self.request(
+        &#34;GET&#34;,
+        &#34;/users/@me&#34;, headers={
+            &#34;Authorization&#34;: f&#34;Bearer {access_token}&#34;
+        }
+    )).json()</code></pre>
+</details>
+</dd>
+<dt id="sanic_discord.Oauth2.get_authorize_url"><code class="name flex">
+<span>def <span class="ident">get_authorize_url</span></span>(<span>self, scope: Optional[List[str]] = ['identify']) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generates a URL to authorize the application.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>scope</code></strong> :&ensp;<code>List[str]</code>, optional</dt>
+<dd>The scope to request. Defaults to ["identify"].</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>The URL to authorize the application.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_authorize_url(self, scope: Optional[List[str]] = [&#34;identify&#34;]) -&gt; str:
+    &#34;&#34;&#34;
+    Generates a URL to authorize the application.
+
+    Args:
+        scope (List[str], optional): The scope to request. Defaults to [&#34;identify&#34;].
+
+    Returns:
+        str: The URL to authorize the application.
+    &#34;&#34;&#34;
+    scope = &#34; &#34;.join(scope)
+    return f&#34;{self.url}/oauth2/authorize&#34; \
+        f&#34;?client_id={self.client_id}&amp;scope={scope}&#34; \
+        f&#34;&amp;response_type=code&amp;redirect_uri={self.redirect_uri}&#34;</code></pre>
+</details>
+</dd>
+<dt id="sanic_discord.Oauth2.refresh_token"><code class="name flex">
+<span>async def <span class="ident">refresh_token</span></span>(<span>self, refresh_token: str) ‑> <a title="sanic_discord.oauth.access_token.AccessToken" href="oauth/access_token.html#sanic_discord.oauth.access_token.AccessToken">AccessToken</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Refreshes an access token using a refresh token.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>refresh_token</code></strong> :&ensp;<code>str</code></dt>
+<dd>The refresh token to use.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="sanic_discord.AccessToken" href="#sanic_discord.AccessToken">AccessToken</a></code></dt>
+<dd>The new access token.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def refresh_token(self, refresh_token: str) -&gt; AccessToken:
+    &#34;&#34;&#34;
+    Refreshes an access token using a refresh token.
+
+    Args:
+        refresh_token (str): The refresh token to use.
+
+    Returns:
+        AccessToken: The new access token.
+    &#34;&#34;&#34;
+    r = await self.request(
+        &#34;POST&#34;,
+        &#34;/oauth2/token&#34;, data={
+            &#34;grant_type&#34;: &#34;refresh_token&#34;,
+            &#34;refresh_token&#34;: refresh_token,
+            &#34;client_id&#34;: self.client_id,
+            &#34;client_secret&#34;: self.client_secret
+        }, headers={
+            &#34;Content-Type&#34;: &#34;application/x-www-form-urlencoded&#34;
+        }
+    )
+    return AccessToken(r.json())</code></pre>
+</details>
+</dd>
+<dt id="sanic_discord.Oauth2.request"><code class="name flex">
+<span>async def <span class="ident">request</span></span>(<span>self, method: str, path: str, *args, **kwargs) ‑> httpx.Response</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Makes a request to the Discord API.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>method</code></strong> :&ensp;<code>str</code></dt>
+<dd>The HTTP method to use.</dd>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>The path to request.</dd>
+<dt><strong><code>*args</code></strong></dt>
+<dd>Any additional arguments to pass to the request.</dd>
+<dt><strong><code>**kwargs</code></strong></dt>
+<dd>Any additional keyword arguments to pass to the request.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>httpx.Response</code></dt>
+<dd>The response from the request.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def request(self, method: str, path: str, *args, **kwargs) -&gt; Response:
+    &#34;&#34;&#34;
+    Makes a request to the Discord API.
+    
+    Args:
+        method (str): The HTTP method to use.
+        path (str): The path to request.
+        *args: Any additional arguments to pass to the request.
+        **kwargs: Any additional keyword arguments to pass to the request.
+    
+    Returns:
+        httpx.Response: The response from the request.&#34;&#34;&#34;
+    return await self.client.request(method, self.url + path, **kwargs)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="sanic_discord.OauthException"><code class="flex name class">
+<span>class <span class="ident">OauthException</span></span>
+<span>(</span><span>message: Union[str, bytes, None] = None, status_code: Optional[int] = None, quiet: Optional[bool] = None, context: Optional[Dict[str, Any]] = None, extra: Optional[Dict[str, Any]] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class OauthException(SanicException):
+    status_code = 403</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>sanic.exceptions.SanicException</li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="sanic_discord.OauthException.message"><code class="name">var <span class="ident">message</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="sanic_discord.OauthException.status_code"><code class="name">var <span class="ident">status_code</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -57,6 +567,45 @@ __author__ = &#34;tuna2134&#34;</code></pre>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
 <li><code><a title="sanic_discord.oauth" href="oauth/index.html">sanic_discord.oauth</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="sanic_discord.AccessToken" href="#sanic_discord.AccessToken">AccessToken</a></code></h4>
+<ul class="">
+<li><code><a title="sanic_discord.AccessToken.expires_in" href="#sanic_discord.AccessToken.expires_in">expires_in</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sanic_discord.AccessTokenType" href="#sanic_discord.AccessTokenType">AccessTokenType</a></code></h4>
+<ul class="">
+<li><code><a title="sanic_discord.AccessTokenType.access_token" href="#sanic_discord.AccessTokenType.access_token">access_token</a></code></li>
+<li><code><a title="sanic_discord.AccessTokenType.expires_in" href="#sanic_discord.AccessTokenType.expires_in">expires_in</a></code></li>
+<li><code><a title="sanic_discord.AccessTokenType.refresh_token" href="#sanic_discord.AccessTokenType.refresh_token">refresh_token</a></code></li>
+<li><code><a title="sanic_discord.AccessTokenType.scope" href="#sanic_discord.AccessTokenType.scope">scope</a></code></li>
+<li><code><a title="sanic_discord.AccessTokenType.token_type" href="#sanic_discord.AccessTokenType.token_type">token_type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sanic_discord.Oauth2" href="#sanic_discord.Oauth2">Oauth2</a></code></h4>
+<ul class="two-column">
+<li><code><a title="sanic_discord.Oauth2.close" href="#sanic_discord.Oauth2.close">close</a></code></li>
+<li><code><a title="sanic_discord.Oauth2.exchange_code" href="#sanic_discord.Oauth2.exchange_code">exchange_code</a></code></li>
+<li><code><a title="sanic_discord.Oauth2.fetch_user" href="#sanic_discord.Oauth2.fetch_user">fetch_user</a></code></li>
+<li><code><a title="sanic_discord.Oauth2.get_authorize_url" href="#sanic_discord.Oauth2.get_authorize_url">get_authorize_url</a></code></li>
+<li><code><a title="sanic_discord.Oauth2.refresh_token" href="#sanic_discord.Oauth2.refresh_token">refresh_token</a></code></li>
+<li><code><a title="sanic_discord.Oauth2.request" href="#sanic_discord.Oauth2.request">request</a></code></li>
+<li><code><a title="sanic_discord.Oauth2.url" href="#sanic_discord.Oauth2.url">url</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sanic_discord.OauthException" href="#sanic_discord.OauthException">OauthException</a></code></h4>
+<ul class="">
+<li><code><a title="sanic_discord.OauthException.message" href="#sanic_discord.OauthException.message">message</a></code></li>
+<li><code><a title="sanic_discord.OauthException.status_code" href="#sanic_discord.OauthException.status_code">status_code</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

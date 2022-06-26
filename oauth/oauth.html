@@ -29,7 +29,6 @@
 </summary>
 <pre><code class="python">&#34;Oauth2 client for sanic.&#34;
 from httpx import AsyncClient, Response
-from requests import Response
 from sanic import Sanic, Request
 
 from typing import List, Optional
@@ -512,7 +511,7 @@ class Oauth2:
 </details>
 </dd>
 <dt id="sanic_discord.oauth.oauth.Oauth2.request"><code class="name flex">
-<span>async def <span class="ident">request</span></span>(<span>self, method: str, path: str, *args, **kwargs) ‑> requests.models.Response</span>
+<span>async def <span class="ident">request</span></span>(<span>self, method: str, path: str, *args, **kwargs) ‑> httpx.Response</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Makes a request to the Discord API.</p>
