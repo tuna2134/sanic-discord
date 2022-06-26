@@ -1,5 +1,7 @@
 # sanic-discord
 
+[Documentation](https://mc-fdc.me/sanic-discord)
+
 ## Install
 
 ```bash
