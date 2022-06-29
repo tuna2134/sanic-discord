@@ -53,6 +53,7 @@ __all__ = (
     &#34;NotFoundException&#34;,
     &#34;AccessToken&#34;,
     &#34;AccessTokenType&#34;,
+    &#34;StateError&#34;,
 
     &#34;InteractionClient&#34;
 )</code></pre>
@@ -485,15 +486,19 @@ Interaction event cacher.</p></div>
             state (bool): If you use state in oauth url, you must do True.
             
         Raises:
-            OauthException: code is `None`.
+            OauthException: code is invaild.
+            StateError: state is invalid.
         &#34;&#34;&#34;
         def decorator(func):
             @wraps(func)
             async def wrapper(request: Request, *args, **kwargs) -&gt; HTTPResponse:
                 code = request.args.get(&#34;code&#34;)
-                if request.args.get(&#34;state&#34;):
-                    if state:
-                        args.append(request.args.get(&#34;state&#34;))
+                if state:
+                    if request.args.get(&#34;state&#34;):
+                        args = list(args)
+                        args.insert(0, request.args.get(&#34;state&#34;))
+                    else:
+                        raise StateError(&#34;state is required.&#34;)
                 if code is None:
                     raise OauthException(&#34;No code provided&#34;)
                 return await func(request, AccessToken(
@@ -529,19 +534,20 @@ Interaction event cacher.</p></div>
             refresh_token, self.client_id, self.client_secret
         ), self.http)
 
-    def get_authorize_url(self, scope: Optional[List[str]] = None, *, state: Optional[str] = None) -&gt; str:
+    def get_authorize_url(self, scope: List[str] = [&#34;identify&#34;], *, state: Optional[str] = None) -&gt; str:
         &#34;&#34;&#34;
         Generates a URL to authorize the application.
 
         Args:
             scope (Optional[List[str]]): The scope to request. Defaults to [&#34;identify&#34;].
+            state (Optional[str]): The state to use. Defaults to None.
 
         Returns:
             str: The URL to authorize the application.
         &#34;&#34;&#34;
         payload = {
             &#34;client_id&#34;: self.client_id,
-            &#34;scope&#34;: &#39; &#39;.join(scope) if scope is not None else &#39;identify&#39;,
+            &#34;scope&#34;: &#39; &#39;.join(scope),
             &#34;response_type&#34;: &#34;code&#34;,
             &#34;redirect_uri&#34;: self.redirect_uri
         }
@@ -580,7 +586,9 @@ Interaction event cacher.</p></div>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="sanic_discord.OauthException" href="#sanic_discord.OauthException">OauthException</a></code></dt>
-<dd>code is <code>None</code>.</dd>
+<dd>code is invaild.</dd>
+<dt><code><a title="sanic_discord.StateError" href="#sanic_discord.StateError">StateError</a></code></dt>
+<dd>state is invalid.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -594,15 +602,19 @@ Interaction event cacher.</p></div>
         state (bool): If you use state in oauth url, you must do True.
         
     Raises:
-        OauthException: code is `None`.
+        OauthException: code is invaild.
+        StateError: state is invalid.
     &#34;&#34;&#34;
     def decorator(func):
         @wraps(func)
         async def wrapper(request: Request, *args, **kwargs) -&gt; HTTPResponse:
             code = request.args.get(&#34;code&#34;)
-            if request.args.get(&#34;state&#34;):
-                if state:
-                    args.append(request.args.get(&#34;state&#34;))
+            if state:
+                if request.args.get(&#34;state&#34;):
+                    args = list(args)
+                    args.insert(0, request.args.get(&#34;state&#34;))
+                else:
+                    raise StateError(&#34;state is required.&#34;)
             if code is None:
                 raise OauthException(&#34;No code provided&#34;)
             return await func(request, AccessToken(
@@ -646,7 +658,7 @@ Interaction event cacher.</p></div>
 </details>
 </dd>
 <dt id="sanic_discord.Oauth2.get_authorize_url"><code class="name flex">
-<span>def <span class="ident">get_authorize_url</span></span>(<span>self, scope: Optional[List[str]] = None, *, state: Optional[str] = None) ‑> str</span>
+<span>def <span class="ident">get_authorize_url</span></span>(<span>self, scope: List[str] = ['identify'], *, state: Optional[str] = None) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Generates a URL to authorize the application.</p>
@@ -654,6 +666,8 @@ Interaction event cacher.</p></div>
 <dl>
 <dt><strong><code>scope</code></strong> :&ensp;<code>Optional[List[str]]</code></dt>
 <dd>The scope to request. Defaults to ["identify"].</dd>
+<dt><strong><code>state</code></strong> :&ensp;<code>Optional[str]</code></dt>
+<dd>The state to use. Defaults to None.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
@@ -664,19 +678,20 @@ Interaction event cacher.</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_authorize_url(self, scope: Optional[List[str]] = None, *, state: Optional[str] = None) -&gt; str:
+<pre><code class="python">def get_authorize_url(self, scope: List[str] = [&#34;identify&#34;], *, state: Optional[str] = None) -&gt; str:
     &#34;&#34;&#34;
     Generates a URL to authorize the application.
 
     Args:
         scope (Optional[List[str]]): The scope to request. Defaults to [&#34;identify&#34;].
+        state (Optional[str]): The state to use. Defaults to None.
 
     Returns:
         str: The URL to authorize the application.
     &#34;&#34;&#34;
     payload = {
         &#34;client_id&#34;: self.client_id,
-        &#34;scope&#34;: &#39; &#39;.join(scope) if scope is not None else &#39;identify&#39;,
+        &#34;scope&#34;: &#39; &#39;.join(scope),
         &#34;response_type&#34;: &#34;code&#34;,
         &#34;redirect_uri&#34;: self.redirect_uri
     }
@@ -743,9 +758,44 @@ Interaction event cacher.</p></div>
 <li>builtins.Exception</li>
 <li>builtins.BaseException</li>
 </ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="sanic_discord.oauth.errors.StateError" href="oauth/errors.html#sanic_discord.oauth.errors.StateError">StateError</a></li>
+</ul>
 <h3>Class variables</h3>
 <dl>
 <dt id="sanic_discord.OauthException.status_code"><code class="name">var <span class="ident">status_code</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="sanic_discord.StateError"><code class="flex name class">
+<span>class <span class="ident">StateError</span></span>
+<span>(</span><span>message: Union[str, bytes, ForwardRef(None)] = None, status_code: Optional[int] = None, quiet: Optional[bool] = None, context: Optional[Dict[str, Any]] = None, extra: Optional[Dict[str, Any]] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>The exception raised when the state is invalid.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class StateError(OauthException):
+    &#34;&#34;&#34;
+    The exception raised when the state is invalid.
+    &#34;&#34;&#34;
+    status_code = 400</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="sanic_discord.oauth.errors.OauthException" href="oauth/errors.html#sanic_discord.oauth.errors.OauthException">OauthException</a></li>
+<li>sanic.exceptions.SanicException</li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="sanic_discord.StateError.status_code"><code class="name">var <span class="ident">status_code</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -824,6 +874,12 @@ Interaction event cacher.</p></div>
 <h4><code><a title="sanic_discord.OauthException" href="#sanic_discord.OauthException">OauthException</a></code></h4>
 <ul class="">
 <li><code><a title="sanic_discord.OauthException.status_code" href="#sanic_discord.OauthException.status_code">status_code</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sanic_discord.StateError" href="#sanic_discord.StateError">StateError</a></code></h4>
+<ul class="">
+<li><code><a title="sanic_discord.StateError.status_code" href="#sanic_discord.StateError.status_code">status_code</a></code></li>
 </ul>
 </li>
 </ul>
