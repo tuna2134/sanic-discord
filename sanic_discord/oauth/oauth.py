@@ -106,8 +106,4 @@ class Oauth2:
         }
         if state is not None:
             payload["state"] = state
-        print(parse.urlencode(payload))
-        return f"{self.http.BASEURL}/oauth2/authorize" \
-            f"?client_id={self.client_id}" \
-            f"&scope={' '.join(scope) if scope is not None else 'identify'}" \
-            f"&response_type=code&redirect_uri={self.redirect_uri}"
+        return f"{self.http.BASEURL}/oauth2/authorize?" + parse.urlencode(payload)
