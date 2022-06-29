@@ -101,7 +101,7 @@ class Oauth2:
         payload = {
             "client_id": self.client_id,
             "scope": ' '.join(scope) if scope is not None else 'identify',
-            "response_type": code,
+            "response_type": "code",
             "redirect_uri": self.redirect_uri
         }
         if state is not None:
