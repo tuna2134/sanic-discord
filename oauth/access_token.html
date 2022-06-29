@@ -42,20 +42,22 @@ class AccessTokenType(TypedDict):
     refresh_token: str
     scope: str
 
+
 class AccessToken:
     &#34;&#34;&#34;
     Accesstoken object.
-    
+
     Args:
         data (AccessTokenType): The access token data.
         http (HttpClient): The HTTP client to use.
-    
+
     Attributes:
         access_token (str): The access token.
         token_type (str): The token type.
         refresh_token (str): The refresh token.
         scope (str): The scope.
         expires_in (datetime): The expiration date.&#34;&#34;&#34;
+
     def __init__(self, data: AccessTokenType, http: HttpClient):
         self.http = http
         self.data = data
@@ -63,12 +65,13 @@ class AccessToken:
         self.token_type = data[&#34;token_type&#34;]
         self.refresh_token = data[&#34;refresh_token&#34;]
         self.scope = data[&#34;scope&#34;]
-        self.expires_in = datetime.now() + timedelta(seconds=self.data[&#34;expires_in&#34;])
+        self.expires_in = datetime.now(
+        ) + timedelta(seconds=self.data[&#34;expires_in&#34;])
 
     async def fetch_user(self) -&gt; dict:
         &#34;&#34;&#34;
         Fetches the user&#39;s profile using an access token.
-        
+
         Returns:
             dict: The user&#39;s profile.&#34;&#34;&#34;
         return await self.http.fetch_user(self.access_token)</code></pre>
@@ -116,17 +119,18 @@ class AccessToken:
 <pre><code class="python">class AccessToken:
     &#34;&#34;&#34;
     Accesstoken object.
-    
+
     Args:
         data (AccessTokenType): The access token data.
         http (HttpClient): The HTTP client to use.
-    
+
     Attributes:
         access_token (str): The access token.
         token_type (str): The token type.
         refresh_token (str): The refresh token.
         scope (str): The scope.
         expires_in (datetime): The expiration date.&#34;&#34;&#34;
+
     def __init__(self, data: AccessTokenType, http: HttpClient):
         self.http = http
         self.data = data
@@ -134,12 +138,13 @@ class AccessToken:
         self.token_type = data[&#34;token_type&#34;]
         self.refresh_token = data[&#34;refresh_token&#34;]
         self.scope = data[&#34;scope&#34;]
-        self.expires_in = datetime.now() + timedelta(seconds=self.data[&#34;expires_in&#34;])
+        self.expires_in = datetime.now(
+        ) + timedelta(seconds=self.data[&#34;expires_in&#34;])
 
     async def fetch_user(self) -&gt; dict:
         &#34;&#34;&#34;
         Fetches the user&#39;s profile using an access token.
-        
+
         Returns:
             dict: The user&#39;s profile.&#34;&#34;&#34;
         return await self.http.fetch_user(self.access_token)</code></pre>
@@ -163,7 +168,7 @@ class AccessToken:
 <pre><code class="python">async def fetch_user(self) -&gt; dict:
     &#34;&#34;&#34;
     Fetches the user&#39;s profile using an access token.
-    
+
     Returns:
         dict: The user&#39;s profile.&#34;&#34;&#34;
     return await self.http.fetch_user(self.access_token)</code></pre>

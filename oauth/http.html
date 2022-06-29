@@ -37,7 +37,7 @@ class HttpClient(RestClient):
     def fetch_user(self, access_token: str) -&gt; dict:
         &#34;&#34;&#34;
         Fetches the user&#39;s profile using an access token.
-        
+
         Args:
             access_token (str): The access token to use.&#34;&#34;&#34;
         return self.request(&#34;GET&#34;, &#34;/users/@me&#34;, headers={&#34;Authorization&#34;: f&#34;Bearer {access_token}&#34;})
@@ -110,7 +110,7 @@ class HttpClient(RestClient):
     def fetch_user(self, access_token: str) -&gt; dict:
         &#34;&#34;&#34;
         Fetches the user&#39;s profile using an access token.
-        
+
         Args:
             access_token (str): The access token to use.&#34;&#34;&#34;
         return self.request(&#34;GET&#34;, &#34;/users/@me&#34;, headers={&#34;Authorization&#34;: f&#34;Bearer {access_token}&#34;})
@@ -223,7 +223,7 @@ class HttpClient(RestClient):
 <pre><code class="python">def fetch_user(self, access_token: str) -&gt; dict:
     &#34;&#34;&#34;
     Fetches the user&#39;s profile using an access token.
-    
+
     Args:
         access_token (str): The access token to use.&#34;&#34;&#34;
     return self.request(&#34;GET&#34;, &#34;/users/@me&#34;, headers={&#34;Authorization&#34;: f&#34;Bearer {access_token}&#34;})</code></pre>

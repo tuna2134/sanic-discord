@@ -36,11 +36,12 @@ from .errors import NotFoundException, HttpException
 class RestClient:
     &#34;&#34;&#34;
     This is a base client for httpclient
-    
+
     Attributes:
         client (httpx.AsyncClient): The client used to make requests.
         BASEURL (str): The base URL of the Discord API.&#34;&#34;&#34;
     BASEURL = &#34;https://discord.com/api/v10&#34;
+
     def __init__(self):
         self.client = AsyncClient()
 
@@ -102,11 +103,12 @@ class RestClient:
 <pre><code class="python">class RestClient:
     &#34;&#34;&#34;
     This is a base client for httpclient
-    
+
     Attributes:
         client (httpx.AsyncClient): The client used to make requests.
         BASEURL (str): The base URL of the Discord API.&#34;&#34;&#34;
     BASEURL = &#34;https://discord.com/api/v10&#34;
+
     def __init__(self):
         self.client = AsyncClient()
 

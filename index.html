@@ -116,17 +116,18 @@ __all__ = (
 <pre><code class="python">class AccessToken:
     &#34;&#34;&#34;
     Accesstoken object.
-    
+
     Args:
         data (AccessTokenType): The access token data.
         http (HttpClient): The HTTP client to use.
-    
+
     Attributes:
         access_token (str): The access token.
         token_type (str): The token type.
         refresh_token (str): The refresh token.
         scope (str): The scope.
         expires_in (datetime): The expiration date.&#34;&#34;&#34;
+
     def __init__(self, data: AccessTokenType, http: HttpClient):
         self.http = http
         self.data = data
@@ -134,12 +135,13 @@ __all__ = (
         self.token_type = data[&#34;token_type&#34;]
         self.refresh_token = data[&#34;refresh_token&#34;]
         self.scope = data[&#34;scope&#34;]
-        self.expires_in = datetime.now() + timedelta(seconds=self.data[&#34;expires_in&#34;])
+        self.expires_in = datetime.now(
+        ) + timedelta(seconds=self.data[&#34;expires_in&#34;])
 
     async def fetch_user(self) -&gt; dict:
         &#34;&#34;&#34;
         Fetches the user&#39;s profile using an access token.
-        
+
         Returns:
             dict: The user&#39;s profile.&#34;&#34;&#34;
         return await self.http.fetch_user(self.access_token)</code></pre>
@@ -163,7 +165,7 @@ __all__ = (
 <pre><code class="python">async def fetch_user(self) -&gt; dict:
     &#34;&#34;&#34;
     Fetches the user&#39;s profile using an access token.
-    
+
     Returns:
         dict: The user&#39;s profile.&#34;&#34;&#34;
     return await self.http.fetch_user(self.access_token)</code></pre>
@@ -449,7 +451,7 @@ Interaction event cacher.</p></div>
 <pre><code class="python">class Oauth2:
     &#34;&#34;&#34;
     The following methods are used to generate the URL to redirect to.
-    
+
     Args:
         app (Sanic): The Sanic app.
         client_id (int): The client ID.
@@ -463,6 +465,7 @@ Interaction event cacher.</p></div>
         redirect_uri (str): The redirect URI.
         client (httpx.AsyncClient): The client used to make requests.
     &#34;&#34;&#34;
+
     def __init__(
         self, app: Sanic, client_id: int, client_secret: str, redirect_uri: str
     ):
@@ -481,10 +484,10 @@ Interaction event cacher.</p></div>
     def exchange_code(self, state: bool = False):
         &#34;&#34;&#34;
         Exchanges a code for an access token.
-        
+
         Args:
             state (bool): If you use state in oauth url, you must do True.
-            
+
         Raises:
             OauthException: code is invaild.
             StateError: state is invalid.
@@ -511,10 +514,10 @@ Interaction event cacher.</p></div>
     async def fetch_user(self, access_token: str) -&gt; dict:
         &#34;&#34;&#34;
         Fetches the user&#39;s profile using an access token.
-        
+
         Args:
             access_token (str): The access token to use.
-            
+
         Returns:
             dict: The user&#39;s profile.
         &#34;&#34;&#34;
@@ -597,10 +600,10 @@ Interaction event cacher.</p></div>
 <pre><code class="python">def exchange_code(self, state: bool = False):
     &#34;&#34;&#34;
     Exchanges a code for an access token.
-    
+
     Args:
         state (bool): If you use state in oauth url, you must do True.
-        
+
     Raises:
         OauthException: code is invaild.
         StateError: state is invalid.
@@ -647,10 +650,10 @@ Interaction event cacher.</p></div>
 <pre><code class="python">async def fetch_user(self, access_token: str) -&gt; dict:
     &#34;&#34;&#34;
     Fetches the user&#39;s profile using an access token.
-    
+
     Args:
         access_token (str): The access token to use.
-        
+
     Returns:
         dict: The user&#39;s profile.
     &#34;&#34;&#34;
