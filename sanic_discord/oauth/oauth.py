@@ -49,6 +49,9 @@ class Oauth2:
         
         Args:
             state (bool): If you use state in oauth url, you must do True.
+            
+        Raises:
+            OauthException: code is `None`.
         """
         def decorator(func):
             @wraps(func)
