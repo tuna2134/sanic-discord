@@ -43,16 +43,20 @@ class Oauth2:
         """
         await self.http.close()
 
-    def exchange_code(self):
+    def exchange_code(self, state: bool = False):
         """
         Exchanges a code for an access token.
+        
+        Args:
+            state (bool): If you use state in oauth url, you must do True.
         """
         def decorator(func):
             @wraps(func)
             async def wrapper(request: Request, *args, **kwargs) -> HTTPResponse:
                 code = request.args.get("code")
                 if request.args.get("state"):
-                    args.append(request.args.get("state"))
+                    if state:
+                        args.append(request.args.get("state"))
                 if code is None:
                     raise OauthException("No code provided")
                 return await func(request, AccessToken(
