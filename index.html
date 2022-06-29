@@ -535,7 +535,7 @@ Interaction event cacher.</p></div>
         payload = {
             &#34;client_id&#34;: self.client_id,
             &#34;scope&#34;: &#39; &#39;.join(scope) if scope is not None else &#39;identify&#39;,
-            &#34;response_type&#34;: code,
+            &#34;response_type&#34;: &#34;code&#34;,
             &#34;redirect_uri&#34;: self.redirect_uri
         }
         if state is not None:
@@ -657,7 +657,7 @@ Interaction event cacher.</p></div>
     payload = {
         &#34;client_id&#34;: self.client_id,
         &#34;scope&#34;: &#39; &#39;.join(scope) if scope is not None else &#39;identify&#39;,
-        &#34;response_type&#34;: code,
+        &#34;response_type&#34;: &#34;code&#34;,
         &#34;redirect_uri&#34;: self.redirect_uri
     }
     if state is not None:
