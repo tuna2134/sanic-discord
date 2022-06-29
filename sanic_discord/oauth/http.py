@@ -9,7 +9,7 @@ class HttpClient(RestClient):
     def fetch_user(self, access_token: str) -> dict:
         """
         Fetches the user's profile using an access token.
-        
+
         Args:
             access_token (str): The access token to use."""
         return self.request("GET", "/users/@me", headers={"Authorization": f"Bearer {access_token}"})

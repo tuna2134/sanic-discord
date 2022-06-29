@@ -14,7 +14,7 @@ from .http import HttpClient
 class Oauth2:
     """
     The following methods are used to generate the URL to redirect to.
-    
+
     Args:
         app (Sanic): The Sanic app.
         client_id (int): The client ID.
@@ -28,6 +28,7 @@ class Oauth2:
         redirect_uri (str): The redirect URI.
         client (httpx.AsyncClient): The client used to make requests.
     """
+
     def __init__(
         self, app: Sanic, client_id: int, client_secret: str, redirect_uri: str
     ):
@@ -46,10 +47,10 @@ class Oauth2:
     def exchange_code(self, state: bool = False):
         """
         Exchanges a code for an access token.
-        
+
         Args:
             state (bool): If you use state in oauth url, you must do True.
-            
+
         Raises:
             OauthException: code is invaild.
             StateError: state is invalid.
@@ -76,10 +77,10 @@ class Oauth2:
     async def fetch_user(self, access_token: str) -> dict:
         """
         Fetches the user's profile using an access token.
-        
+
         Args:
             access_token (str): The access token to use.
-            
+
         Returns:
             dict: The user's profile.
         """
