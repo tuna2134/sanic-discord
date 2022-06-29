@@ -12,8 +12,9 @@ oauth2 = Oauth2(
 
 
 @app.get("/callback")
-@oauth2.exchange_code()
-async def redirect(_, access_token):
+@oauth2.exchange_code(state=True)
+async def redirect(_, access_token, state):
+    print(state)
     r = response.redirect("/me")
     r.cookies["access_token"] = access_token.access_token
     r.cookies["access_token"]["expires"] = access_token.expires_in
@@ -21,7 +22,7 @@ async def redirect(_, access_token):
 
 @app.get("/login")
 async def login(_):
-    return response.redirect(oauth2.get_authorize_url())
+    return response.redirect(oauth2.get_authorize_url(state="hello world"))
 
 @app.get("/me")
 async def me(request):

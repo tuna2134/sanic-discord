@@ -7,6 +7,12 @@ class OauthException(SanicException):
     """
     status_code = 403
 
+class StateError(OauthException):
+    """
+    The exception raised when the state is invalid.
+    """
+    status_code = 400
+
 class HttpException(SanicException):
     """
     The base exception for all HTTP exceptions.

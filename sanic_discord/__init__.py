@@ -13,6 +13,7 @@ __all__ = (
     "NotFoundException",
     "AccessToken",
     "AccessTokenType",
+    "StateError",
 
     "InteractionClient"
 )
