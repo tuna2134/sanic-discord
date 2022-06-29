@@ -4,6 +4,7 @@ from sanic import Sanic, Request, HTTPResponse
 from typing import List, Optional
 
 from functools import wraps
+from urllib import parse
 
 from .errors import OauthException
 from .access_token import AccessToken
@@ -50,6 +51,8 @@ class Oauth2:
             @wraps(func)
             async def wrapper(request: Request, *args, **kwargs) -> HTTPResponse:
                 code = request.args.get("code")
+                if request.args.get("state"):
+                    args.append(request.args.get("state"))
                 if code is None:
                     raise OauthException("No code provided")
                 return await func(request, AccessToken(
@@ -85,7 +88,7 @@ class Oauth2:
             refresh_token, self.client_id, self.client_secret
         ), self.http)
 
-    def get_authorize_url(self, scope: Optional[List[str]] = None) -> str:
+    def get_authorize_url(self, scope: Optional[List[str]] = None, *, state: Optional[str] = None) -> str:
         """
         Generates a URL to authorize the application.
 
@@ -95,6 +98,15 @@ class Oauth2:
         Returns:
             str: The URL to authorize the application.
         """
+        payload = {
+            "client_id": self.client_id,
+            "scope": ' '.join(scope) if scope is not None else 'identify',
+            "response_type": code,
+            "redirect_uri": self.redirect_uri
+        }
+        if state is not None:
+            payload["state"] = state
+        print(parser.urlencode(payload))
         return f"{self.http.BASEURL}/oauth2/authorize" \
             f"?client_id={self.client_id}" \
             f"&scope={' '.join(scope) if scope is not None else 'identify'}" \
