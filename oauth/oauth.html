@@ -78,6 +78,9 @@ class Oauth2:
         
         Args:
             state (bool): If you use state in oauth url, you must do True.
+            
+        Raises:
+            OauthException: code is `None`.
         &#34;&#34;&#34;
         def decorator(func):
             @wraps(func)
@@ -223,6 +226,9 @@ class Oauth2:
         
         Args:
             state (bool): If you use state in oauth url, you must do True.
+            
+        Raises:
+            OauthException: code is `None`.
         &#34;&#34;&#34;
         def decorator(func):
             @wraps(func)
@@ -313,6 +319,11 @@ class Oauth2:
 <dl>
 <dt><strong><code>state</code></strong> :&ensp;<code>bool</code></dt>
 <dd>If you use state in oauth url, you must do True.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>OauthException</code></dt>
+<dd>code is <code>None</code>.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -324,6 +335,9 @@ class Oauth2:
     
     Args:
         state (bool): If you use state in oauth url, you must do True.
+        
+    Raises:
+        OauthException: code is `None`.
     &#34;&#34;&#34;
     def decorator(func):
         @wraps(func)
