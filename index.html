@@ -477,16 +477,20 @@ Interaction event cacher.</p></div>
         &#34;&#34;&#34;
         await self.http.close()
 
-    def exchange_code(self):
+    def exchange_code(self, state: bool = False):
         &#34;&#34;&#34;
         Exchanges a code for an access token.
+        
+        Args:
+            state (bool): If you use state in oauth url, you must do True.
         &#34;&#34;&#34;
         def decorator(func):
             @wraps(func)
             async def wrapper(request: Request, *args, **kwargs) -&gt; HTTPResponse:
                 code = request.args.get(&#34;code&#34;)
                 if request.args.get(&#34;state&#34;):
-                    args.append(request.args.get(&#34;state&#34;))
+                    if state:
+                        args.append(request.args.get(&#34;state&#34;))
                 if code is None:
                     raise OauthException(&#34;No code provided&#34;)
                 return await func(request, AccessToken(
@@ -561,24 +565,33 @@ Interaction event cacher.</p></div>
 </details>
 </dd>
 <dt id="sanic_discord.Oauth2.exchange_code"><code class="name flex">
-<span>def <span class="ident">exchange_code</span></span>(<span>self)</span>
+<span>def <span class="ident">exchange_code</span></span>(<span>self, state: bool = False)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Exchanges a code for an access token.</p></div>
+<div class="desc"><p>Exchanges a code for an access token.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>state</code></strong> :&ensp;<code>bool</code></dt>
+<dd>If you use state in oauth url, you must do True.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def exchange_code(self):
+<pre><code class="python">def exchange_code(self, state: bool = False):
     &#34;&#34;&#34;
     Exchanges a code for an access token.
+    
+    Args:
+        state (bool): If you use state in oauth url, you must do True.
     &#34;&#34;&#34;
     def decorator(func):
         @wraps(func)
         async def wrapper(request: Request, *args, **kwargs) -&gt; HTTPResponse:
             code = request.args.get(&#34;code&#34;)
             if request.args.get(&#34;state&#34;):
-                args.append(request.args.get(&#34;state&#34;))
+                if state:
+                    args.append(request.args.get(&#34;state&#34;))
             if code is None:
                 raise OauthException(&#34;No code provided&#34;)
             return await func(request, AccessToken(
