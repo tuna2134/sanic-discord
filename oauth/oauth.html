@@ -33,6 +33,7 @@ from sanic import Sanic, Request, HTTPResponse
 from typing import List, Optional
 
 from functools import wraps
+from urllib import parse
 
 from .errors import OauthException
 from .access_token import AccessToken
@@ -79,6 +80,8 @@ class Oauth2:
             @wraps(func)
             async def wrapper(request: Request, *args, **kwargs) -&gt; HTTPResponse:
                 code = request.args.get(&#34;code&#34;)
+                if request.args.get(&#34;state&#34;):
+                    args.append(request.args.get(&#34;state&#34;))
                 if code is None:
                     raise OauthException(&#34;No code provided&#34;)
                 return await func(request, AccessToken(
@@ -114,7 +117,7 @@ class Oauth2:
             refresh_token, self.client_id, self.client_secret
         ), self.http)
 
-    def get_authorize_url(self, scope: Optional[List[str]] = None) -&gt; str:
+    def get_authorize_url(self, scope: Optional[List[str]] = None, *, state: Optional[str] = None) -&gt; str:
         &#34;&#34;&#34;
         Generates a URL to authorize the application.
 
@@ -124,6 +127,15 @@ class Oauth2:
         Returns:
             str: The URL to authorize the application.
         &#34;&#34;&#34;
+        payload = {
+            &#34;client_id&#34;: self.client_id,
+            &#34;scope&#34;: &#39; &#39;.join(scope) if scope is not None else &#39;identify&#39;,
+            &#34;response_type&#34;: code,
+            &#34;redirect_uri&#34;: self.redirect_uri
+        }
+        if state is not None:
+            payload[&#34;state&#34;] = state
+        print(parser.urlencode(payload))
         return f&#34;{self.http.BASEURL}/oauth2/authorize&#34; \
             f&#34;?client_id={self.client_id}&#34; \
             f&#34;&amp;scope={&#39; &#39;.join(scope) if scope is not None else &#39;identify&#39;}&#34; \
@@ -213,6 +225,8 @@ class Oauth2:
             @wraps(func)
             async def wrapper(request: Request, *args, **kwargs) -&gt; HTTPResponse:
                 code = request.args.get(&#34;code&#34;)
+                if request.args.get(&#34;state&#34;):
+                    args.append(request.args.get(&#34;state&#34;))
                 if code is None:
                     raise OauthException(&#34;No code provided&#34;)
                 return await func(request, AccessToken(
@@ -248,7 +262,7 @@ class Oauth2:
             refresh_token, self.client_id, self.client_secret
         ), self.http)
 
-    def get_authorize_url(self, scope: Optional[List[str]] = None) -&gt; str:
+    def get_authorize_url(self, scope: Optional[List[str]] = None, *, state: Optional[str] = None) -&gt; str:
         &#34;&#34;&#34;
         Generates a URL to authorize the application.
 
@@ -258,6 +272,15 @@ class Oauth2:
         Returns:
             str: The URL to authorize the application.
         &#34;&#34;&#34;
+        payload = {
+            &#34;client_id&#34;: self.client_id,
+            &#34;scope&#34;: &#39; &#39;.join(scope) if scope is not None else &#39;identify&#39;,
+            &#34;response_type&#34;: code,
+            &#34;redirect_uri&#34;: self.redirect_uri
+        }
+        if state is not None:
+            payload[&#34;state&#34;] = state
+        print(parser.urlencode(payload))
         return f&#34;{self.http.BASEURL}/oauth2/authorize&#34; \
             f&#34;?client_id={self.client_id}&#34; \
             f&#34;&amp;scope={&#39; &#39;.join(scope) if scope is not None else &#39;identify&#39;}&#34; \
@@ -298,6 +321,8 @@ class Oauth2:
         @wraps(func)
         async def wrapper(request: Request, *args, **kwargs) -&gt; HTTPResponse:
             code = request.args.get(&#34;code&#34;)
+            if request.args.get(&#34;state&#34;):
+                args.append(request.args.get(&#34;state&#34;))
             if code is None:
                 raise OauthException(&#34;No code provided&#34;)
             return await func(request, AccessToken(
@@ -341,7 +366,7 @@ class Oauth2:
 </details>
 </dd>
 <dt id="sanic_discord.oauth.oauth.Oauth2.get_authorize_url"><code class="name flex">
-<span>def <span class="ident">get_authorize_url</span></span>(<span>self, scope: Optional[List[str]] = None) ‑> str</span>
+<span>def <span class="ident">get_authorize_url</span></span>(<span>self, scope: Optional[List[str]] = None, *, state: Optional[str] = None) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Generates a URL to authorize the application.</p>
@@ -359,7 +384,7 @@ class Oauth2:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_authorize_url(self, scope: Optional[List[str]] = None) -&gt; str:
+<pre><code class="python">def get_authorize_url(self, scope: Optional[List[str]] = None, *, state: Optional[str] = None) -&gt; str:
     &#34;&#34;&#34;
     Generates a URL to authorize the application.
 
@@ -369,6 +394,15 @@ class Oauth2:
     Returns:
         str: The URL to authorize the application.
     &#34;&#34;&#34;
+    payload = {
+        &#34;client_id&#34;: self.client_id,
+        &#34;scope&#34;: &#39; &#39;.join(scope) if scope is not None else &#39;identify&#39;,
+        &#34;response_type&#34;: code,
+        &#34;redirect_uri&#34;: self.redirect_uri
+    }
+    if state is not None:
+        payload[&#34;state&#34;] = state
+    print(parser.urlencode(payload))
     return f&#34;{self.http.BASEURL}/oauth2/authorize&#34; \
         f&#34;?client_id={self.client_id}&#34; \
         f&#34;&amp;scope={&#39; &#39;.join(scope) if scope is not None else &#39;identify&#39;}&#34; \
