@@ -98,15 +98,8 @@ __all__ = (
     def decorator(func):
         @wraps(func)
         async def wrapper(request: Request, *args, **kwargs) -&gt; HTTPResponse:
-            if state:
-                if request.args.get(&#34;state&#34;):
-                    args = list(args)
-                    args.insert(0, request.args.get(&#34;state&#34;))
-                else:
-                    raise StateError(&#34;state is required.&#34;)
-            return await func(
-                request, await request.app.ctx.oauth2._exchange_code(request), *args, **kwargs
-            )
+            results = (await request.app.ctx.oauth2._exchange_code(request, state)) + args
+            return await func(request, *results, **kwargs)
         return wrapper
     return decorator</code></pre>
 </details>
@@ -507,7 +500,7 @@ Interaction event cacher.</p></div>
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
         self.http = HttpClient()
-        self.app.ctx.oauth2 = self
+        self.app.ctx.oauth2: Oauth2 = self
 
     async def close(self) -&gt; None:
         &#34;&#34;&#34;
@@ -528,34 +521,35 @@ Interaction event cacher.</p></div>
         def decorator(func):
             @wraps(func)
             async def wrapper(request: Request, *args, **kwargs) -&gt; HTTPResponse:
-                if state:
-                    if request.args.get(&#34;state&#34;):
-                        args = list(args)
-                        args.insert(0, request.args.get(&#34;state&#34;))
-                    else:
-                        raise StateError(&#34;state is required.&#34;)
-                return await func(
-                    request, await self._exchange_code(request), *args, **kwargs
-                )
+                results = (await self._exchange_code(request, state)) + args
+                return await func(request, *results, **kwargs)
             return wrapper
         return decorator
 
-    async def _exchange_code(self, request: Request) -&gt; AccessToken:
+    async def _exchange_code(self, request: Request, state: bool = False) -&gt; Tuple[AccessToken, ...]:
         &#34;&#34;&#34;
         Exchanges a code for an access token.
 
         Args:
             request (Request): The request.
+            state (bool): If you use state in oauth url, you must do True.
 
         Raises:
-            OauthException: code is invaild.
+            StateError: state is invalid.
         &#34;&#34;&#34;
+        args = []
+        if state:
+            if request.args.get(&#34;state&#34;):
+                args.append(request.args.get(&#34;state&#34;))
+            else:
+                raise StateError(&#34;state is required.&#34;)
         code = request.args.get(&#34;code&#34;)
         if code is None:
             raise OauthException(&#34;code is invaild.&#34;)
-        return AccessToken(await self.http.exchange_code(
+        args.insert(0, AccessToken(await self.http.exchange_code(
             code, self.redirect_uri, self.client_id, self.client_secret
-        ), self.http)
+        ), self.http))
+        return tuple(args)
 
     async def fetch_user(self, access_token: str) -&gt; dict:
         &#34;&#34;&#34;
@@ -654,15 +648,8 @@ Interaction event cacher.</p></div>
     def decorator(func):
         @wraps(func)
         async def wrapper(request: Request, *args, **kwargs) -&gt; HTTPResponse:
-            if state:
-                if request.args.get(&#34;state&#34;):
-                    args = list(args)
-                    args.insert(0, request.args.get(&#34;state&#34;))
-                else:
-                    raise StateError(&#34;state is required.&#34;)
-            return await func(
-                request, await self._exchange_code(request), *args, **kwargs
-            )
+            results = (await self._exchange_code(request, state)) + args
+            return await func(request, *results, **kwargs)
         return wrapper
     return decorator</code></pre>
 </details>
