@@ -37,7 +37,7 @@ class Oauth2:
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
         self.http = HttpClient()
-        self.app.ctx.oauth2 = self
+        self.app.ctx.oauth2: Oauth2 = self
 
     async def close(self) -> None:
         """
@@ -58,34 +58,35 @@ class Oauth2:
         def decorator(func):
             @wraps(func)
             async def wrapper(request: Request, *args, **kwargs) -> HTTPResponse:
-                if state:
-                    if request.args.get("state"):
-                        args = list(args)
-                        args.insert(0, request.args.get("state"))
-                    else:
-                        raise StateError("state is required.")
-                return await func(
-                    request, await self._exchange_code(request), *args, **kwargs
-                )
+                results = (await self._exchange_code(request, state)) + args
+                return await func(request, *results, **kwargs)
             return wrapper
         return decorator
 
-    async def _exchange_code(self, request: Request) -> AccessToken:
+    async def _exchange_code(self, request: Request, state: bool = False) -> Tuple[AccessToken, ...]:
         """
         Exchanges a code for an access token.
 
         Args:
             request (Request): The request.
+            state (bool): If you use state in oauth url, you must do True.
 
         Raises:
-            OauthException: code is invaild.
+            StateError: state is invalid.
         """
+        args = []
+        if state:
+            if request.args.get("state"):
+                args.append(request.args.get("state"))
+            else:
+                raise StateError("state is required.")
         code = request.args.get("code")
         if code is None:
             raise OauthException("code is invaild.")
-        return AccessToken(await self.http.exchange_code(
+        args.insert(0, AccessToken(await self.http.exchange_code(
             code, self.redirect_uri, self.client_id, self.client_secret
-        ), self.http)
+        ), self.http))
+        return tuple(args)
 
     async def fetch_user(self, access_token: str) -> dict:
         """
