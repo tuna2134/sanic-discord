@@ -54,6 +54,7 @@ __all__ = (
     &#34;AccessToken&#34;,
     &#34;AccessTokenType&#34;,
     &#34;StateError&#34;,
+    &#34;exchange_code&#34;,
 
     &#34;InteractionClient&#34;
 )</code></pre>
@@ -79,6 +80,38 @@ __all__ = (
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="sanic_discord.exchange_code"><code class="name flex">
+<span>def <span class="ident">exchange_code</span></span>(<span>state: bool = False) ‑> <built-in function callable></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Exchanges a code for an access token.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def exchange_code(state: bool = False) -&gt; callable:
+    &#34;&#34;&#34;
+    Exchanges a code for an access token.
+    &#34;&#34;&#34;
+    def decorator(func):
+        @wraps(func)
+        async def wrapper(request: Request, *args, **kwargs) -&gt; HTTPResponse:
+            if state:
+                if request.args.get(&#34;state&#34;):
+                    args = list(args)
+                    args.insert(0, request.args.get(&#34;state&#34;))
+                else:
+                    raise StateError(&#34;state is required.&#34;)
+            return await func(
+                request, await request.app.ctx.oauth2._exchange_code(request), *args, **kwargs
+            )
+        return wrapper
+    return decorator</code></pre>
+</details>
+</dd>
+</dl>
 </section>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
@@ -474,6 +507,7 @@ Interaction event cacher.</p></div>
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
         self.http = HttpClient()
+        self.app.ctx.oauth2 = self
 
     async def close(self) -&gt; None:
         &#34;&#34;&#34;
@@ -489,27 +523,39 @@ Interaction event cacher.</p></div>
             state (bool): If you use state in oauth url, you must do True.
 
         Raises:
-            OauthException: code is invaild.
             StateError: state is invalid.
         &#34;&#34;&#34;
         def decorator(func):
             @wraps(func)
             async def wrapper(request: Request, *args, **kwargs) -&gt; HTTPResponse:
-                code = request.args.get(&#34;code&#34;)
                 if state:
                     if request.args.get(&#34;state&#34;):
                         args = list(args)
                         args.insert(0, request.args.get(&#34;state&#34;))
                     else:
                         raise StateError(&#34;state is required.&#34;)
-                if code is None:
-                    raise OauthException(&#34;No code provided&#34;)
-                return await func(request, AccessToken(
-                    await self.http.exchange_code(
-                        code, self.redirect_uri, self.client_id, self.client_secret
-                    ), self.http), *args, **kwargs)
+                return await func(
+                    request, await self._exchange_code(request), *args, **kwargs
+                )
             return wrapper
         return decorator
+
+    async def _exchange_code(self, request: Request) -&gt; AccessToken:
+        &#34;&#34;&#34;
+        Exchanges a code for an access token.
+
+        Args:
+            request (Request): The request.
+
+        Raises:
+            OauthException: code is invaild.
+        &#34;&#34;&#34;
+        code = request.args.get(&#34;code&#34;)
+        if code is None:
+            raise OauthException(&#34;code is invaild.&#34;)
+        return AccessToken(await self.http.exchange_code(
+            code, self.redirect_uri, self.client_id, self.client_secret
+        ), self.http)
 
     async def fetch_user(self, access_token: str) -&gt; dict:
         &#34;&#34;&#34;
@@ -588,8 +634,6 @@ Interaction event cacher.</p></div>
 </dl>
 <h2 id="raises">Raises</h2>
 <dl>
-<dt><code><a title="sanic_discord.OauthException" href="#sanic_discord.OauthException">OauthException</a></code></dt>
-<dd>code is invaild.</dd>
 <dt><code><a title="sanic_discord.StateError" href="#sanic_discord.StateError">StateError</a></code></dt>
 <dd>state is invalid.</dd>
 </dl></div>
@@ -605,25 +649,20 @@ Interaction event cacher.</p></div>
         state (bool): If you use state in oauth url, you must do True.
 
     Raises:
-        OauthException: code is invaild.
         StateError: state is invalid.
     &#34;&#34;&#34;
     def decorator(func):
         @wraps(func)
         async def wrapper(request: Request, *args, **kwargs) -&gt; HTTPResponse:
-            code = request.args.get(&#34;code&#34;)
             if state:
                 if request.args.get(&#34;state&#34;):
                     args = list(args)
                     args.insert(0, request.args.get(&#34;state&#34;))
                 else:
                     raise StateError(&#34;state is required.&#34;)
-            if code is None:
-                raise OauthException(&#34;No code provided&#34;)
-            return await func(request, AccessToken(
-                await self.http.exchange_code(
-                    code, self.redirect_uri, self.client_id, self.client_secret
-                ), self.http), *args, **kwargs)
+            return await func(
+                request, await self._exchange_code(request), *args, **kwargs
+            )
         return wrapper
     return decorator</code></pre>
 </details>
@@ -823,6 +862,11 @@ Interaction event cacher.</p></div>
 <li><code><a title="sanic_discord.interaction" href="interaction/index.html">sanic_discord.interaction</a></code></li>
 <li><code><a title="sanic_discord.oauth" href="oauth/index.html">sanic_discord.oauth</a></code></li>
 <li><code><a title="sanic_discord.rest" href="rest/index.html">sanic_discord.rest</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="sanic_discord.exchange_code" href="#sanic_discord.exchange_code">exchange_code</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
