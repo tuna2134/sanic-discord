@@ -83,7 +83,7 @@ __all__ = (
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="sanic_discord.exchange_code"><code class="name flex">
-<span>def <span class="ident">exchange_code</span></span>(<span>state: bool = False) ‑> <built-in function callable></span>
+<span>def <span class="ident">exchange_code</span></span>(<span>*args, **kwargs) ‑> <built-in function callable></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Exchanges a code for an access token.</p></div>
@@ -91,15 +91,15 @@ __all__ = (
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def exchange_code(state: bool = False) -&gt; callable:
+<pre><code class="python">def exchange_code(*args, **kwargs) -&gt; callable:
     &#34;&#34;&#34;
     Exchanges a code for an access token.
     &#34;&#34;&#34;
     def decorator(func):
         @wraps(func)
-        async def wrapper(request: Request, *args, **kwargs) -&gt; HTTPResponse:
-            results = (await request.app.ctx.oauth2._exchange_code(request, state)) + args
-            return await func(request, *results, **kwargs)
+        async def wrapper(request: Request, *args_wrapper, **kwargs_wrapper) -&gt; HTTPResponse:
+            results = (await request.app.ctx.oauth2._exchange_code(request, *args, **kwargs)) + args_wrapper
+            return await func(request, *results, **kwargs_wrapper)
         return wrapper
     return decorator</code></pre>
 </details>
