@@ -14,6 +14,7 @@ __all__ = (
     "AccessToken",
     "AccessTokenType",
     "StateError",
+    "exchange_code",
 
     "InteractionClient"
 )

@@ -1,7 +1,7 @@
 "Oauth2 client for sanic."
 from sanic import Sanic, Request, HTTPResponse
 
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from functools import wraps
 from urllib import parse
@@ -37,6 +37,7 @@ class Oauth2:
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
         self.http = HttpClient()
+        self.app.ctx.oauth2 = self
 
     async def close(self) -> None:
         """
@@ -52,27 +53,39 @@ class Oauth2:
             state (bool): If you use state in oauth url, you must do True.
 
         Raises:
-            OauthException: code is invaild.
             StateError: state is invalid.
         """
         def decorator(func):
             @wraps(func)
             async def wrapper(request: Request, *args, **kwargs) -> HTTPResponse:
-                code = request.args.get("code")
                 if state:
                     if request.args.get("state"):
                         args = list(args)
                         args.insert(0, request.args.get("state"))
                     else:
                         raise StateError("state is required.")
-                if code is None:
-                    raise OauthException("No code provided")
-                return await func(request, AccessToken(
-                    await self.http.exchange_code(
-                        code, self.redirect_uri, self.client_id, self.client_secret
-                    ), self.http), *args, **kwargs)
+                return await func(
+                    request, await self._exchange_code(request), *args, **kwargs
+                )
             return wrapper
         return decorator
+
+    async def _exchange_code(self, request: Request) -> AccessToken:
+        """
+        Exchanges a code for an access token.
+
+        Args:
+            request (Request): The request.
+
+        Raises:
+            OauthException: code is invaild.
+        """
+        code = request.args.get("code")
+        if code is None:
+            raise OauthException("code is invaild.")
+        return AccessToken(await self.http.exchange_code(
+            code, self.redirect_uri, self.client_id, self.client_secret
+        ), self.http)
 
     async def fetch_user(self, access_token: str) -> dict:
         """

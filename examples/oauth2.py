@@ -1,5 +1,5 @@
 from sanic import Sanic, response
-from sanic_discord import Oauth2
+from sanic_discord import Oauth2, exchange_code
 
 from os import getenv
 
@@ -12,7 +12,7 @@ oauth2 = Oauth2(
 
 
 @app.get("/callback")
-@oauth2.exchange_code(state=True)
+@exchange_code(state=True)
 async def redirect(_, access_token, state):
     print(state)
     r = response.redirect("/me")
