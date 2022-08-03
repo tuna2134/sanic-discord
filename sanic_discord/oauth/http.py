@@ -54,3 +54,11 @@ class HttpClient(RestClient):
         }, headers={
             "Content-Type": "application/x-www-form-urlencoded"
         })
+
+    async def add_guild(
+        self, guild_id: str, user_id: str, access_token: str
+    ) -> None:
+        await self.request(
+            "GET", f"//guilds/{guild_id}/members/{user_id}",
+            params={"access_token": access_token}
+        )
