@@ -28,6 +28,8 @@
 </summary>
 <pre><code class="python">from sanic_discord.rest import RestClient
 
+from typing import List
+
 
 class HttpClient(RestClient):
     &#34;&#34;&#34;
@@ -41,6 +43,9 @@ class HttpClient(RestClient):
         Args:
             access_token (str): The access token to use.&#34;&#34;&#34;
         return self.request(&#34;GET&#34;, &#34;/users/@me&#34;, headers={&#34;Authorization&#34;: f&#34;Bearer {access_token}&#34;})
+    
+    def fetch_guilds(self, access_token: str) -&gt; List[dict]:
+        return self.request(&#34;GET&#34;, &#34;/users/@me/guilds&#34;, headers={&#34;Authorization&#34;: f&#34;Bearer {access_token}&#34;})
 
     def exchange_code(
         self, code: str, redirect_uri: str,
@@ -122,6 +127,9 @@ class HttpClient(RestClient):
         Args:
             access_token (str): The access token to use.&#34;&#34;&#34;
         return self.request(&#34;GET&#34;, &#34;/users/@me&#34;, headers={&#34;Authorization&#34;: f&#34;Bearer {access_token}&#34;})
+    
+    def fetch_guilds(self, access_token: str) -&gt; List[dict]:
+        return self.request(&#34;GET&#34;, &#34;/users/@me/guilds&#34;, headers={&#34;Authorization&#34;: f&#34;Bearer {access_token}&#34;})
 
     def exchange_code(
         self, code: str, redirect_uri: str,
@@ -240,6 +248,19 @@ class HttpClient(RestClient):
     })</code></pre>
 </details>
 </dd>
+<dt id="sanic_discord.oauth.http.HttpClient.fetch_guilds"><code class="name flex">
+<span>def <span class="ident">fetch_guilds</span></span>(<span>self, access_token: str) ‑> List[dict]</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def fetch_guilds(self, access_token: str) -&gt; List[dict]:
+    return self.request(&#34;GET&#34;, &#34;/users/@me/guilds&#34;, headers={&#34;Authorization&#34;: f&#34;Bearer {access_token}&#34;})</code></pre>
+</details>
+</dd>
 <dt id="sanic_discord.oauth.http.HttpClient.fetch_user"><code class="name flex">
 <span>def <span class="ident">fetch_user</span></span>(<span>self, access_token: str) ‑> dict</span>
 </code></dt>
@@ -328,6 +349,7 @@ class HttpClient(RestClient):
 <ul class="">
 <li><code><a title="sanic_discord.oauth.http.HttpClient.add_guild" href="#sanic_discord.oauth.http.HttpClient.add_guild">add_guild</a></code></li>
 <li><code><a title="sanic_discord.oauth.http.HttpClient.exchange_code" href="#sanic_discord.oauth.http.HttpClient.exchange_code">exchange_code</a></code></li>
+<li><code><a title="sanic_discord.oauth.http.HttpClient.fetch_guilds" href="#sanic_discord.oauth.http.HttpClient.fetch_guilds">fetch_guilds</a></code></li>
 <li><code><a title="sanic_discord.oauth.http.HttpClient.fetch_user" href="#sanic_discord.oauth.http.HttpClient.fetch_user">fetch_user</a></code></li>
 <li><code><a title="sanic_discord.oauth.http.HttpClient.refresh_token" href="#sanic_discord.oauth.http.HttpClient.refresh_token">refresh_token</a></code></li>
 </ul>
