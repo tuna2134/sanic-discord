@@ -99,6 +99,9 @@ class Oauth2:
             dict: The user's profile.
         """
         return await self.http.fetch_user(access_token)
+    
+    async def fetch_guilds(self, access_token: str) -> List[dict]:
+        return await self.http.fetch_guilds(access_token)
 
     async def refresh_token(self, refresh_token: str) -> AccessToken:
         """
