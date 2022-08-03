@@ -1,6 +1,6 @@
 from .http import HttpClient
 
-from typing import TypedDict
+from typing import TypedDict, List
 
 from datetime import datetime, timedelta
 
@@ -47,6 +47,9 @@ class AccessToken:
         Returns:
             dict: The user's profile."""
         return await self.http.fetch_user(self.access_token)
+    
+    async def fetch_guilds(self) -> List[dict]:
+        return await self.http.fetch_guilds(self.access_token)
 
     async def add_guild(self, guildid: int):
         pass
