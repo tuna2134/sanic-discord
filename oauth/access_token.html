@@ -74,7 +74,10 @@ class AccessToken:
 
         Returns:
             dict: The user&#39;s profile.&#34;&#34;&#34;
-        return await self.http.fetch_user(self.access_token)</code></pre>
+        return await self.http.fetch_user(self.access_token)
+
+    async def add_guild(self, guildid: int):
+        pass</code></pre>
 </details>
 </section>
 <section>
@@ -147,10 +150,26 @@ class AccessToken:
 
         Returns:
             dict: The user&#39;s profile.&#34;&#34;&#34;
-        return await self.http.fetch_user(self.access_token)</code></pre>
+        return await self.http.fetch_user(self.access_token)
+
+    async def add_guild(self, guildid: int):
+        pass</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
+<dt id="sanic_discord.oauth.access_token.AccessToken.add_guild"><code class="name flex">
+<span>async def <span class="ident">add_guild</span></span>(<span>self, guildid: int)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def add_guild(self, guildid: int):
+    pass</code></pre>
+</details>
+</dd>
 <dt id="sanic_discord.oauth.access_token.AccessToken.fetch_user"><code class="name flex">
 <span>async def <span class="ident">fetch_user</span></span>(<span>self) ‑> dict</span>
 </code></dt>
@@ -242,6 +261,7 @@ class AccessToken:
 <li>
 <h4><code><a title="sanic_discord.oauth.access_token.AccessToken" href="#sanic_discord.oauth.access_token.AccessToken">AccessToken</a></code></h4>
 <ul class="">
+<li><code><a title="sanic_discord.oauth.access_token.AccessToken.add_guild" href="#sanic_discord.oauth.access_token.AccessToken.add_guild">add_guild</a></code></li>
 <li><code><a title="sanic_discord.oauth.access_token.AccessToken.fetch_user" href="#sanic_discord.oauth.access_token.AccessToken.fetch_user">fetch_user</a></code></li>
 </ul>
 </li>
