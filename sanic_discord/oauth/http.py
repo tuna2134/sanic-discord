@@ -1,5 +1,7 @@
 from sanic_discord.rest import RestClient
 
+from typing import List
+
 
 class HttpClient(RestClient):
     """
@@ -13,6 +15,9 @@ class HttpClient(RestClient):
         Args:
             access_token (str): The access token to use."""
         return self.request("GET", "/users/@me", headers={"Authorization": f"Bearer {access_token}"})
+    
+    def fetch_guilds(self, access_token: str) -> List[dict]:
+        return self.request("GET", "/users/@me/guilds", headers={"Authorization": f"Bearer {access_token}"})
 
     def exchange_code(
         self, code: str, redirect_uri: str,
