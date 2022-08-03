@@ -171,6 +171,9 @@ __all__ = (
         Returns:
             dict: The user&#39;s profile.&#34;&#34;&#34;
         return await self.http.fetch_user(self.access_token)
+    
+    async def fetch_guilds(self) -&gt; List[dict]:
+        return await self.http.fetch_guilds(self.access_token)
 
     async def add_guild(self, guildid: int):
         pass</code></pre>
@@ -188,6 +191,19 @@ __all__ = (
 </summary>
 <pre><code class="python">async def add_guild(self, guildid: int):
     pass</code></pre>
+</details>
+</dd>
+<dt id="sanic_discord.AccessToken.fetch_guilds"><code class="name flex">
+<span>async def <span class="ident">fetch_guilds</span></span>(<span>self) ‑> List[dict]</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def fetch_guilds(self) -&gt; List[dict]:
+    return await self.http.fetch_guilds(self.access_token)</code></pre>
 </details>
 </dd>
 <dt id="sanic_discord.AccessToken.fetch_user"><code class="name flex">
@@ -878,6 +894,7 @@ Interaction event cacher.</p></div>
 <h4><code><a title="sanic_discord.AccessToken" href="#sanic_discord.AccessToken">AccessToken</a></code></h4>
 <ul class="">
 <li><code><a title="sanic_discord.AccessToken.add_guild" href="#sanic_discord.AccessToken.add_guild">add_guild</a></code></li>
+<li><code><a title="sanic_discord.AccessToken.fetch_guilds" href="#sanic_discord.AccessToken.fetch_guilds">fetch_guilds</a></code></li>
 <li><code><a title="sanic_discord.AccessToken.fetch_user" href="#sanic_discord.AccessToken.fetch_user">fetch_user</a></code></li>
 </ul>
 </li>
