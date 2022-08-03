@@ -128,6 +128,9 @@ class Oauth2:
             dict: The user&#39;s profile.
         &#34;&#34;&#34;
         return await self.http.fetch_user(access_token)
+    
+    async def fetch_guilds(self, access_token: str) -&gt; List[dict]:
+        return await self.http.fetch_guilds(access_token)
 
     async def refresh_token(self, refresh_token: str) -&gt; AccessToken:
         &#34;&#34;&#34;
@@ -296,6 +299,9 @@ class Oauth2:
             dict: The user&#39;s profile.
         &#34;&#34;&#34;
         return await self.http.fetch_user(access_token)
+    
+    async def fetch_guilds(self, access_token: str) -&gt; List[dict]:
+        return await self.http.fetch_guilds(access_token)
 
     async def refresh_token(self, refresh_token: str) -&gt; AccessToken:
         &#34;&#34;&#34;
@@ -386,6 +392,19 @@ class Oauth2:
             return await func(request, *results, **kwargs)
         return wrapper
     return decorator</code></pre>
+</details>
+</dd>
+<dt id="sanic_discord.oauth.oauth.Oauth2.fetch_guilds"><code class="name flex">
+<span>async def <span class="ident">fetch_guilds</span></span>(<span>self, access_token: str) ‑> List[dict]</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def fetch_guilds(self, access_token: str) -&gt; List[dict]:
+    return await self.http.fetch_guilds(access_token)</code></pre>
 </details>
 </dd>
 <dt id="sanic_discord.oauth.oauth.Oauth2.fetch_user"><code class="name flex">
@@ -517,9 +536,10 @@ class Oauth2:
 <ul>
 <li>
 <h4><code><a title="sanic_discord.oauth.oauth.Oauth2" href="#sanic_discord.oauth.oauth.Oauth2">Oauth2</a></code></h4>
-<ul class="">
+<ul class="two-column">
 <li><code><a title="sanic_discord.oauth.oauth.Oauth2.close" href="#sanic_discord.oauth.oauth.Oauth2.close">close</a></code></li>
 <li><code><a title="sanic_discord.oauth.oauth.Oauth2.exchange_code" href="#sanic_discord.oauth.oauth.Oauth2.exchange_code">exchange_code</a></code></li>
+<li><code><a title="sanic_discord.oauth.oauth.Oauth2.fetch_guilds" href="#sanic_discord.oauth.oauth.Oauth2.fetch_guilds">fetch_guilds</a></code></li>
 <li><code><a title="sanic_discord.oauth.oauth.Oauth2.fetch_user" href="#sanic_discord.oauth.oauth.Oauth2.fetch_user">fetch_user</a></code></li>
 <li><code><a title="sanic_discord.oauth.oauth.Oauth2.get_authorize_url" href="#sanic_discord.oauth.oauth.Oauth2.get_authorize_url">get_authorize_url</a></code></li>
 <li><code><a title="sanic_discord.oauth.oauth.Oauth2.refresh_token" href="#sanic_discord.oauth.oauth.Oauth2.refresh_token">refresh_token</a></code></li>
