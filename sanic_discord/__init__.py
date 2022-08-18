@@ -4,7 +4,7 @@
 from .oauth import *
 from .interaction import *
 
-__version__ = "2.0.0a"
+__version__ = "2.0.0"
 __author__ = "tuna2134"
 __all__ = (
     "Oauth2",
