@@ -2,7 +2,7 @@
 
 [![Discord](https://img.shields.io/discord/961916734137315358?label=support&logo=discord)](https://discord.gg/TsxAB8ssSm)
 
-[Documentation](https://mc-fdc.me/sanic-discord)
+[Documentation](https://tuna2134.github.io/sanic-discord)
 
 [![Downloads](https://pepy.tech/badge/sanic-discord)](https://pepy.tech/project/sanic-discord)
 [![Downloads](https://pepy.tech/badge/sanic-discord/month)](https://pepy.tech/project/sanic-discord)
