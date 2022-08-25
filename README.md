@@ -2,6 +2,7 @@
 
 [![Discord](https://img.shields.io/discord/961916734137315358?label=support&logo=discord)](https://discord.gg/TsxAB8ssSm)
 
+[![Deploy document](https://github.com/tuna2134/sanic-discord/actions/workflows/docs.yml/badge.svg?branch=rewrite)](https://github.com/tuna2134/sanic-discord/actions/workflows/docs.yml)
 [![Downloads](https://pepy.tech/badge/sanic-discord)](https://pepy.tech/project/sanic-discord)
 [![Downloads](https://pepy.tech/badge/sanic-discord/month)](https://pepy.tech/project/sanic-discord)
 [![Downloads](https://pepy.tech/badge/sanic-discord/week)](https://pepy.tech/project/sanic-discord)
