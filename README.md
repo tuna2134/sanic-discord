@@ -21,6 +21,6 @@ pip install "sanic-discord @ git+https://github.com/tuna2134/sanic-discord.git@r
 
 ## Links
 
-[Document](https://tuna2134.github.io/sanic-discord)
+* [Document](https://tuna2134.github.io/sanic-discord)
 
-[Github](https://github.com/tuna2134/sanic-discord.git)
+* [Github](https://github.com/tuna2134/sanic-discord.git)
