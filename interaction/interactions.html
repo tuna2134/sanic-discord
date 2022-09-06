@@ -22,6 +22,23 @@
 <h1 class="title">Module <code>sanic_discord.interaction.interactions</code></h1>
 </header>
 <section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from sanic import response
+
+from typing import TypedDict
+
+
+class InteractionType(TypedDict):
+    id: int
+    application_id: int
+
+class Interaction:
+    def __init__(self, data: InteractionType):
+        pass</code></pre>
+</details>
 </section>
 <section>
 </section>
@@ -30,6 +47,64 @@
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="sanic_discord.interaction.interactions.Interaction"><code class="flex name class">
+<span>class <span class="ident">Interaction</span></span>
+<span>(</span><span>data: <a title="sanic_discord.interaction.interactions.InteractionType" href="#sanic_discord.interaction.interactions.InteractionType">InteractionType</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Interaction:
+    def __init__(self, data: InteractionType):
+        pass</code></pre>
+</details>
+</dd>
+<dt id="sanic_discord.interaction.interactions.InteractionType"><code class="flex name class">
+<span>class <span class="ident">InteractionType</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>dict() -&gt; new empty dictionary
+dict(mapping) -&gt; new dictionary initialized from a mapping object's
+(key, value) pairs
+dict(iterable) -&gt; new dictionary initialized as if via:
+d = {}
+for k, v in iterable:
+d[k] = v
+dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
+in the keyword argument list.
+For example:
+dict(one=1, two=2)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InteractionType(TypedDict):
+    id: int
+    application_id: int</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.dict</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="sanic_discord.interaction.interactions.InteractionType.application_id"><code class="name">var <span class="ident">application_id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="sanic_discord.interaction.interactions.InteractionType.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -41,6 +116,20 @@
 <li><h3>Super-module</h3>
 <ul>
 <li><code><a title="sanic_discord.interaction" href="index.html">sanic_discord.interaction</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="sanic_discord.interaction.interactions.Interaction" href="#sanic_discord.interaction.interactions.Interaction">Interaction</a></code></h4>
+</li>
+<li>
+<h4><code><a title="sanic_discord.interaction.interactions.InteractionType" href="#sanic_discord.interaction.interactions.InteractionType">InteractionType</a></code></h4>
+<ul class="">
+<li><code><a title="sanic_discord.interaction.interactions.InteractionType.application_id" href="#sanic_discord.interaction.interactions.InteractionType.application_id">application_id</a></code></li>
+<li><code><a title="sanic_discord.interaction.interactions.InteractionType.id" href="#sanic_discord.interaction.interactions.InteractionType.id">id</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
