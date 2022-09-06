@@ -502,7 +502,7 @@ Interaction event cacher.</p></div>
 <dd>The client secret.</dd>
 <dt><strong><code>redirect_uri</code></strong> :&ensp;<code>str</code></dt>
 <dd>The redirect URI.</dd>
-<dt><strong><code>client</code></strong> :&ensp;<code>httpx.AsyncClient</code></dt>
+<dt><strong><code>http</code></strong> :&ensp;<code>HttpClient</code></dt>
 <dd>The client used to make requests.</dd>
 </dl></div>
 <details class="source">
@@ -524,7 +524,7 @@ Interaction event cacher.</p></div>
         client_id (int): The client ID.
         client_secret (str): The client secret.
         redirect_uri (str): The redirect URI.
-        client (httpx.AsyncClient): The client used to make requests.
+        http (HttpClient): The client used to make requests.
     &#34;&#34;&#34;
 
     def __init__(
@@ -534,7 +534,7 @@ Interaction event cacher.</p></div>
         self.client_id = client_id
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
-        self.http = HttpClient()
+        self.http: HttpClient = HttpClient()
         self.app.ctx.oauth2: Oauth2 = self
 
     async def close(self) -&gt; None:
@@ -599,6 +599,15 @@ Interaction event cacher.</p></div>
         return await self.http.fetch_user(access_token)
     
     async def fetch_guilds(self, access_token: str) -&gt; List[dict]:
+        &#34;&#34;&#34;
+        Get a guilds
+        
+        Args:
+            access_token (str): The access token
+        
+        Returns:
+            List[dict]
+        &#34;&#34;&#34;
         return await self.http.fetch_guilds(access_token)
 
     async def refresh_token(self, refresh_token: str) -&gt; AccessToken:
@@ -696,12 +705,28 @@ Interaction event cacher.</p></div>
 <span>async def <span class="ident">fetch_guilds</span></span>(<span>self, access_token: str) ‑> List[dict]</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Get a guilds</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>access_token</code></strong> :&ensp;<code>str</code></dt>
+<dd>The access token</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>List[dict]</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">async def fetch_guilds(self, access_token: str) -&gt; List[dict]:
+    &#34;&#34;&#34;
+    Get a guilds
+    
+    Args:
+        access_token (str): The access token
+    
+    Returns:
+        List[dict]
+    &#34;&#34;&#34;
     return await self.http.fetch_guilds(access_token)</code></pre>
 </details>
 </dd>
