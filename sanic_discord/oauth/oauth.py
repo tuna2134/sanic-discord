@@ -26,7 +26,7 @@ class Oauth2:
         client_id (int): The client ID.
         client_secret (str): The client secret.
         redirect_uri (str): The redirect URI.
-        client (httpx.AsyncClient): The client used to make requests.
+        http (HttpClient): The client used to make requests.
     """
 
     def __init__(
@@ -36,7 +36,7 @@ class Oauth2:
         self.client_id = client_id
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
-        self.http = HttpClient()
+        self.http: HttpClient = HttpClient()
         self.app.ctx.oauth2: Oauth2 = self
 
     async def close(self) -> None:
@@ -101,6 +101,15 @@ class Oauth2:
         return await self.http.fetch_user(access_token)
     
     async def fetch_guilds(self, access_token: str) -> List[dict]:
+        """
+        Get a guilds
+        
+        Args:
+            access_token (str): The access token
+        
+        Returns:
+            List[dict]
+        """
         return await self.http.fetch_guilds(access_token)
 
     async def refresh_token(self, refresh_token: str) -> AccessToken:
