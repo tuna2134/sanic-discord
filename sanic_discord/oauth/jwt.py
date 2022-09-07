@@ -1,8 +1,13 @@
 from .oauth import Oauth
 
 frim sanic import Sanic
-from sanic_jwt import initialize
-from sanic_jwt.exceptions import AuthenticationFailed
+try:
+    from sanic_jwt import initialize
+    from sanic_jwt.exceptions import AuthenticationFailed
+except ImportError:
+    invalid = True
+else:
+    invalid = False
 
 from typing import TypedDict
 
