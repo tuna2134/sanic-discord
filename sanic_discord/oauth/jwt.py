@@ -1,4 +1,4 @@
-from .oauth import Oauth
+from .oauth import Oauth2
 
 from sanic import Sanic
 try:
@@ -12,7 +12,7 @@ else:
 from typing import TypedDict
 
 
-class OauthJWT(Oauth):
+class OauthJWT(Oauth2):
 
     def __init__(self, app: Sanic, options: dict, *args, **kwargs):
         super().__init__(*args, **kwargs)
