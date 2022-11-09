@@ -14,7 +14,9 @@ class RestClient:
         BASEURL (str): The base URL of the Discord API."""
     BASEURL = "https://discord.com/api/v10"
 
-    def __init__(self):
+    def __init__(self, auth_type: str, token: str):
+        self.auth_type = auth_type
+        self.token = token
         self.client = AsyncClient()
 
     async def close(self) -> None:
@@ -35,6 +37,7 @@ class RestClient:
             HttpException: If the request returns an error.
         Returns:
             httpx.Response: The response from the request."""
+        kwargs["headers"]["Authorization"] = "{} {}".format(self.auth_type, self.token)
         for _ in range(10):
             r = await self.client.request(method, self.BASEURL + path, *args, **kwargs)
             if r.status_code == 200:
