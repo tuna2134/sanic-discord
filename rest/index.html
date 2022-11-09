@@ -54,7 +54,6 @@ __all__ = (&#34;RestClient&#34;,)</code></pre>
 <dl>
 <dt id="sanic_discord.rest.RestClient"><code class="flex name class">
 <span>class <span class="ident">RestClient</span></span>
-<span>(</span><span>auth_type: str, token: str)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>This is a base client for httpclient</p>
@@ -78,9 +77,7 @@ __all__ = (&#34;RestClient&#34;,)</code></pre>
         BASEURL (str): The base URL of the Discord API.&#34;&#34;&#34;
     BASEURL = &#34;https://discord.com/api/v10&#34;
 
-    def __init__(self, auth_type: str, token: str):
-        self.auth_type = auth_type
-        self.token = token
+    def __init__(self):
         self.client = AsyncClient()
 
     async def close(self) -&gt; None:
@@ -101,7 +98,6 @@ __all__ = (&#34;RestClient&#34;,)</code></pre>
             HttpException: If the request returns an error.
         Returns:
             httpx.Response: The response from the request.&#34;&#34;&#34;
-        kwargs[&#34;headers&#34;][&#34;Authorization&#34;] = &#34;{} {}&#34;.format(self.auth_type, self.token)
         for _ in range(10):
             r = await self.client.request(method, self.BASEURL + path, *args, **kwargs)
             if r.status_code == 200:
@@ -187,7 +183,6 @@ __all__ = (&#34;RestClient&#34;,)</code></pre>
         HttpException: If the request returns an error.
     Returns:
         httpx.Response: The response from the request.&#34;&#34;&#34;
-    kwargs[&#34;headers&#34;][&#34;Authorization&#34;] = &#34;{} {}&#34;.format(self.auth_type, self.token)
     for _ in range(10):
         r = await self.client.request(method, self.BASEURL + path, *args, **kwargs)
         if r.status_code == 200:
