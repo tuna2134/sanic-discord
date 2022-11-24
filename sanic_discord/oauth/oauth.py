@@ -1,4 +1,5 @@
 "Oauth2 client for sanic."
+
 from sanic import Sanic, Request, HTTPResponse
 
 from typing import List, Optional, Tuple
